@@ -276,71 +276,186 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
+* is a home-based food and beverage (F&B) business owner
+* has a need to manage a significant number of customer contacts from multiple messaging platforms, complex dietary requirements, and food orders with varying deadlines
+* prefers desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* is reasonably comfortable using CLI (Command Line Interface) apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Manage customer profiles and track food orders significantly faster than a typical mouse/GUI-driven app.
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a …​                      | I want to …​                                                                                           | So that I can…​                                                                                                                          |
+|----------|------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `* * *`  | First-time user              | Add a customer with their name and at least one contact field (phone, email, IG, Telegram, or address) | Maintain a centralized database of my customers regardless of which platform they use to contact me                                      |
+| `* * *`  | User                         | Delete customer profiles                                                                               | Remove customers who no longer order from me and keep my customer database clean                                                         |
+| `* * *`  | Seller with many customers   | View a list of all my customers                                                                        | View my customer base at a glance                                                                                                        |
+| `* * *`  | User                         | Add new food orders for a specific customer (item, quantity, time, destination, status)                | Record new orders as they arrive from different message platforms                                                                        |
+| `* * *`  | User                         | Delete food orders by a specific customer                                                              | Keep my records updated when a customer cancels their order                                                                              |
+| `* * *`  | Conscientious seller         | View a specific customer's order history alongside their contact details                               | Quickly understand their past preferences and current pending requests before responding to their messages                               |
+| `* * *`  | Busy seller with many orders | View a list of all upcoming food orders across my entire customer base                                 | Plan my order preparation schedule and ensure no orders are missed during peak periods                                                   |
+| `**`     | Seller with many customers   | Search for specific customers by name                                                                  | Quickly retrieve customer details without scrolling through a long list                                                                  |
+| `**`     | Seller with many customers   | Search for customers by their phone number, Instagram handle, or Telegram handle                       | Quickly identify a returning customer even if I only have their social media handle or phone number                                      |
+| `**`     | User                         | Edit customer details including their name, phone number, delivery address or social media handles     | Update addresses or contact numbers when they change                                                                                     |
+| `**`     | User                         | Edit existing order details for any customer                                                           | Keep my records updated when a customer edits their request                                                                              |
+| `**`     | Conscientious seller         | Categorize customers by type (e.g., Corporate, Regular, New)                                           | Tailor my marketing efforts based on customer type to build long-term relationships                                                      |
+| `**`     | Conscientious seller         | Add special notes for each user (“prefers weekend delivery”, “no chilli” etc)                          | Deliver a more personalised service                                                                                                      |
+| `**`     | Conscientious seller         | Record the dietary restrictions of each customer (e.g., vegan, no peanuts)                             | Avoid preparing products that are potentially harmful for them                                                                           |
+| `*`      | User                         | Upload a profile picture for a customer contact                                                        | Visually verify a customer's identity during order handovers and reduce the risk of record-entry errors for customers with similar names |
+| `*`      | User                         | Store contact details of ingredient suppliers separately                                               | Maintain a clear separation between my customers and my ingredient providers                                                             |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `BZNUS` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: UC01 - Add Customer**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1. Seller chooses to add a new customer.
 
-    Use case ends.
+2. BZNUS requests for the customer details.
+
+3. Seller enters the requested details.
+
+4. BZNUS saves the contact information.
+
+5. BZNUS shows a success message to show the customer is added.
+
+Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+- 3a. BZNUS detects invalid or missing mandatory data (e.g., blank name). 
 
+  - 3a1. BZNUS requests for the correct data.
+
+  - 3a2. Seller enters new data.
+
+  - Steps 3a1-3a2 are repeated until the data entered are correct.
+
+    Use case resumes from step 4.
+
+- *a. At any time, Seller chooses to cancel adding a customer.
+
+  - *a1. BZNUS discards the input and returns to the previous view.
+
+    Use case ends.
+
+---
+
+**Use case: UC02 - Delete Customer**
+
+**MSS:**
+
+1. User chooses to delete a specific customer profile.
+
+2. BZNUS requests for confirmation to delete.
+
+3. User confirms the deletion.
+
+4. BZNUS deletes the customer profile and removes them from the list.
+
+5. BZNUS shows a success message to show the customer is deleted.
+
+   Use case ends.
+
+**Extensions:**
+
+- *a. At any time, User chooses to cancel the deletion.
+  - *a1. BZNUS cancels the deletion process and returns to the previous view.
   Use case ends.
 
-* 3a. The given index is invalid.
+---
 
-    * 3a1. AddressBook shows an error message.
+**Use case: UC03 - Edit Customer**
 
-      Use case resumes at step 2.
+**MSS:**
 
-*{More to be added}*
+1. User chooses to edit a specific customer profile.
+
+2. BZNUS displays the current contact details and allows editing.
+
+3. User enters the updated details.
+
+4. User saves the changes.
+
+5. BZNUS updates the profile and displays the revised details.
+
+   Use case ends.
+
+**Extensions:**
+
+- 3a. BZNUS detects invalid data (e.g., letters in a phone number field).
+
+    - 3a1. BZNUS requests for the correct data.
+  
+    - 3a2. Seller enters new data.
+  
+    - Steps 3a1-3a2 are repeated until the data entered are correct.
+
+    Use case resumes from step 4.
+
+--- 
+
+**Use case: UC04 - Add tags to customers**
+
+**MSS:**
+
+1. User chooses to add tags to a specific customer profile.
+
+2. User inputs the desired tags (e.g., "corporate", "vegan", "weekend delivery").
+
+3. User saves the tags.
+
+4. BZNUS updates the customer profile to display the new tags.
+
+   Use case ends.
+
+---
+
+**Use case: UC05 - Search customer information**
+
+**MSS:**
+
+1. User enters search keywords (e.g., name, phone number, delivery address).
+
+2. BZNUS retrieves and displays a list of customer profiles matching the keywords.
+
+   Use case ends.
+
+**Extensions:**
+
+- 1a. BZNUS detects no matching customers for the entered keyword.
+
+    - 1a1. BZNUS displays a message indicating no results were found.
+
+      Use case ends.
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+2. Should be able to hold up to 1000 persons and 5000 orders without a noticeable sluggishness in performance for typical usage.
+3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. All customer and order data should be stored locally in a human-editable .json or .txt file.
+5. The system must be designed as a standalone application and should not depend on a remote server or external database.
+6. All valid commands should display results within 2 seconds of the user pressing 'Enter'.
+7. The interface should be intuitive enough that a home-based F&B seller with basic computer literacy can navigate the system without needing a comprehensive training manual.
+8. The system should handle invalid user inputs gracefully by displaying clear and helpful error messages without crashing.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Home-based F&B seller**: The primary user of BZNUS, an individual running a small-scale food and beverage operation from their home.
+* **Tag**: A customizable, color-coded label assigned to a customer to quickly identify specific traits, preferences, or dietary restrictions (e.g., "vegan", "VIP", "corporate").
+* **CLI (Command Line Interface)**: A text-based user interface used to interact with the software by typing commands.
+* **JSON (JavaScript Object Notation)**: A lightweight, text-based, human-readable format used for storing the application's data locally.
 
 --------------------------------------------------------------------------------------------------------------------
 
