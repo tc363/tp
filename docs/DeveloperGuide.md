@@ -276,34 +276,38 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
+* is a home-based food and beverage (F&B) business owner
+* has a need to manage a significant number of customer contacts, dietary preferences, and food orders
+* prefers desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* is reasonably comfortable using CLI (Command Line Interface) apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Manage customer profiles and track food orders significantly faster than a typical mouse/GUI-driven app.
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                    | I want to …​                                                                     | So that I can…​                                                                                     |
-|----------|----------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `* * *`  | First-time user            | Save the contact information of customers                                        | Keep the contacts within my device locally                                                          |
-| `* * *`  | Seller with many customers | Search for specific customers by name                                            | Quickly retrieve customer details without scrolling through a long list                             |
-| `* * *`  | Home-based F&B seller      | Edit my customer information                                                     | Update addresses or contact numbers when they change.                                               |
-| `* * *`  | Home-based F&B seller      | Delete client profiles                                                           | Remove customers who no longer order from me                                                        |
-| `* * *`  | Home-based F&B seller      | View all my customers in a list                                                  | View my customer base at a glance                                                                   |
-| `* * *`  | Home-based F&B seller      | Tag my customers with categories                                                 | Identify them easily                                                                                |
-| `* * *`  | Home-based F&B seller      | Record dietary restrictions of each customer                                     | Avoid making products that are potentially harmful for them                                         |
-| `* * *`  | User                       | Edit order information                                                           | Enter order details for a specific customer when an order comes in                                  |
-| `* *`    | Busy user                  | Track all upcoming food orders                                                   | Prevent myself from forgetting orders                                                               |
-| `* *`    | User                       | Upload a picture with the contact                                                | Recognise them by face                                                                              |
-| `* *`    | Home-based F&B seller      | Add special notes for each user (“prefers weekend delivery”, “no chilli” etc)    | Deliver a more personalised service                                                                 | 
-| `* *`    | Seller with many customers | Search for customers by their phone number, Instagram handle, or Telegram handle | Quickly identify a returning customer even if I only have their social media handle or phone number |
-| `*`      | Home-based F&B seller      | Have another section for the contact details of ingredient suppliers             | Have a clear separation between customers and ingredient providers                                  |
+| Priority | As a …​                      | I want to …​                                                                                           | So that I can…​                                                                                                                          |
+|----------|------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `* * *`  | First-time user              | Add a customer with their name and at least one contact field (phone, email, IG, Telegram, or address) | Maintain a centralized database of my customers regardless of which platform they use to contact me                                      |
+| `* * *`  | User                         | Delete customer profiles                                                                               | Remove customers who no longer order from me and keep my customer database clean                                                         |
+| `* * *`  | Seller with many customers   | View a list of all my customers                                                                        | View my customer base at a glance                                                                                                        |
+| `* * *`  | User                         | Add new food orders for a specific customer (item, quantity, time, destination, status)                | Record new orders as they arrive from different message platforms                                                                        |
+| `* * *`  | User                         | Delete food orders by a specific customer                                                              | Keep my records updated when a customer cancels their order                                                                              |
+| `* * *`  | Conscientious seller         | View a specific customer's order history alongside their contact details                               | Quickly understand their past preferences and current pending requests before responding to their messages                               |
+| `* * *`  | Busy seller with many orders | View a list of all upcoming food orders across my entire customer base                                 | Plan my order preparation schedule and ensure no orders are missed during peak periods                                                   |
+| `**`     | Seller with many customers   | Search for specific customers by name                                                                  | Quickly retrieve customer details without scrolling through a long list                                                                  |
+| `**`     | Seller with many customers   | Search for customers by their phone number, Instagram handle, or Telegram handle                       | Quickly identify a returning customer even if I only have their social media handle or phone number                                      |
+| `**`     | User                         | Edit customer details including their name, phone number, delivery address or social media handles     | Update addresses or contact numbers when they change                                                                                     |
+| `**`     | User                         | Edit existing order details for any customer                                                           | Keep my records updated when a customer edits their request                                                                              |
+| `**`     | Conscientious seller         | Categorize customers by type (e.g., Corporate, Regular, New)                                           | Tailor my marketing efforts based on customer type to build long-term relationships                                                      |
+| `**`     | Conscientious seller         | Add special notes for each user (“prefers weekend delivery”, “no chilli” etc)                          | Deliver a more personalised service                                                                                                      |
+| `**`     | Conscientious seller         | Record the dietary restrictions of each customer (e.g., vegan, no peanuts)                             | Avoid preparing products that are potentially harmful for them                                                                           |
+| `*`      | User                         | Upload a profile picture for a customer contact                                                        | Visually verify a customer's identity during order handovers and reduce the risk of record-entry errors for customers with similar names |
+| `*`      | User                         | Store contact details of ingredient suppliers separately                                               | Maintain a clear separation between my customers and my ingredient providers                                                             |
 
 ### Use cases
 
@@ -435,13 +439,14 @@ Use case ends.
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4.  All customer and order data should be saved locally on the user's device in a readable text file.
-5.  Commands should execute and display results within 2 seconds.
-6.  The interface should be intuitive enough that a home-based F&B seller with basic computer literacy can navigate the system without needing a comprehensive training manual.
-7.  The system should handle invalid user inputs gracefully without crashing, instead displaying clear and helpful error messages.
+1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+2. Should be able to hold up to 1000 persons and 5000 orders without a noticeable sluggishness in performance for typical usage.
+3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. All customer and order data should be stored locally in a human-editable .json or .txt file.
+5. The system must be designed as a standalone application and should not depend on a remote server or external database.
+6. All valid commands should display results within 2 seconds of the user pressing 'Enter'.
+7. The interface should be intuitive enough that a home-based F&B seller with basic computer literacy can navigate the system without needing a comprehensive training manual.
+8. The system should handle invalid user inputs gracefully by displaying clear and helpful error messages without crashing.
 
 ### Glossary
 
