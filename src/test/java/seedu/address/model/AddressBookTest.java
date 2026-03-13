@@ -101,7 +101,7 @@ public class AddressBookTest {
         @Override
         public ObservableList<Order> getOrderList() {
         return FXCollections.observableArrayList(); // Return an empty list or mock data
-        }   
+        }
 
         @Override
         public ObservableList<Person> getPersonList() {
