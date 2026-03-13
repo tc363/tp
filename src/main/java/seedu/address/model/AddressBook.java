@@ -1,11 +1,12 @@
 package seedu.address.model;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.order.Order;
+import seedu.address.model.order.OrderList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -16,6 +17,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private final OrderList orders;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -26,6 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
+        orders = new OrderList();
     }
 
     public AddressBook() {}
@@ -74,6 +77,9 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void addPerson(Person p) {
         persons.add(p);
     }
+    public void addOrder(Order o) {
+        orders.add(o);
+    }
 
     /**
      * Replaces the given person {@code target} in the list with {@code editedPerson}.
@@ -85,13 +91,18 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         persons.setPerson(target, editedPerson);
     }
-
+    public void setOrder(List<Order> orders) {
+        this.orders.setOrders(orders);
+    }
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
      */
     public void removePerson(Person key) {
         persons.remove(key);
+    }
+    public void removeOrder(Order key) {
+        orders.remove(key);
     }
 
     //// util methods
@@ -108,6 +119,10 @@ public class AddressBook implements ReadOnlyAddressBook {
         return persons.asUnmodifiableObservableList();
     }
 
+    @Override
+    public ObservableList<Order> getOrderList() {
+        return orders.asUnmodifiableObservableList();
+    }
     @Override
     public boolean equals(Object other) {
         if (other == this) {
