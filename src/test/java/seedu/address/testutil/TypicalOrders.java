@@ -42,6 +42,14 @@ public class TypicalOrders {
             .withStatus("DELIVERED")
             .build();
 
+    public static final Order ORDER_D = new OrderBuilder()
+            .withCustomerIndex(2)
+            .withItem("Cake")
+            .withQuantity("2")
+            .withDeliveryTime("2026-03-15 14:30")
+            .withAddress(VALID_ADDRESS_AMY)
+            .withStatus("READY")
+            .build();
     private TypicalOrders() {} // prevents instantiation
 
     /**

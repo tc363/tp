@@ -72,7 +72,17 @@ public class OrderList {
         return internalList.isEmpty();
     }
 
-    public Order get(int index) {}
+    /**
+     * Contains method for OrderList to check if an order exists
+     */
+    public boolean contains(Order order) {
+        requireNonNull(order);
+        return internalList.contains(order);
+    }
+
+    public int size() {return internalList.size();}
+
+    public Order get(int index) {return internalList.get(index);}
     @Override
     public boolean equals(Object other) {
         if (other == this) {
