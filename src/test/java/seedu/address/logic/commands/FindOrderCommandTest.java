@@ -3,6 +3,9 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.testutil.TypicalOrders.ORDER_A;
+import static seedu.address.testutil.TypicalOrders.ORDER_B;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
@@ -10,8 +13,6 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.order.OrderContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
-import static seedu.address.testutil.TypicalOrders.ORDER_A;
-import static seedu.address.testutil.TypicalOrders.ORDER_B;
 
 public class FindOrderCommandTest {
 
@@ -39,7 +40,7 @@ public class FindOrderCommandTest {
                 new UserPrefs());
 
         FindOrderCommand command = new FindOrderCommand(
-                new OrderContainsKeywordsPredicate(OrderContainsKeywordsPredicate.SearchType.ADDRESS, "Clementi"));
+                new OrderContainsKeywordsPredicate(OrderContainsKeywordsPredicate.SearchType.ADDRESS, "Amy"));
         command.execute(model);
 
         assertEquals(1, model.getFilteredOrderList().size());
