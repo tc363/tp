@@ -63,6 +63,17 @@ public class OrderBuilder {
     }
 
     /**
+     * Sets the customer index of the {@code Order} being built.
+     *
+     * @param index An {@code Index} representing the customer in the address book.
+     * @return This {@code OrderBuilder} for method chaining.
+     */
+    public OrderBuilder withCustomerIndex(Index index) {
+        this.customerIndex = index;
+        return this;
+    }
+
+    /**
      * Sets the item of the {@code Order} being built.
      *
      * @param item The item name.

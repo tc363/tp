@@ -3,8 +3,10 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.order.Order;
 import seedu.address.model.order.OrderList;
@@ -52,6 +54,10 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.persons.setPersons(persons);
     }
 
+    public void setOrders(List<Order> orders) {
+        this.orders.setOrders(orders);
+    }
+
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
@@ -59,6 +65,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
+        setOrders(newData.getOrderList());
     }
 
     //// person-level operations
@@ -106,6 +113,30 @@ public class AddressBook implements ReadOnlyAddressBook {
         orders.remove(key);
     }
 
+    //// order-level operations
+
+    /**
+     * Adds an order to the address book.
+     */
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    /**
+     * Removes {@code order} from this {@code AddressBook}.
+     */
+    public void removeOrder(Order order) {
+        orders.remove(order);
+    }
+
+    /**
+     * Removes all orders in this {@code AddressBook} made by customer
+     * identified by {@code customerIndex}.
+     */
+    public void removeOrdersForCustomer(Index customerIndex) {
+        orders.removeOrdersForCustomer(customerIndex);
+    }
+
     //// util methods
 
     @Override
@@ -124,6 +155,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public ObservableList<Order> getOrderList() {
         return orders.asUnmodifiableObservableList();
     }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -136,11 +168,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons);
+        return persons.equals(otherAddressBook.persons)
+                && orders.equals(otherAddressBook.orders);
     }
 
     @Override
     public int hashCode() {
-        return persons.hashCode();
+        return Objects.hash(persons, orders);
     }
 }

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
@@ -167,6 +168,21 @@ public class AddCommandTest {
         @Override
         public ObservableList<Order> getFilteredOrderList() {
             throw new UnsupportedOperationException("Not supported yet.");
+        public void addOrder(Order order) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteOrder(Order order) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override public void deleteOrdersForCustomer(Index customerIndex) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override public ObservableList<Order> getOrderList() {
+            throw new AssertionError("This method should not be called.");
         }
     }
 

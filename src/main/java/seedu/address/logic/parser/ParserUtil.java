@@ -9,6 +9,10 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.order.DeliveryTime;
+import seedu.address.model.order.Item;
+import seedu.address.model.order.Quantity;
+import seedu.address.model.order.Status;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -120,5 +124,71 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String Item} into an {@code Item}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code Item} is invalid.
+     */
+    public static Item parseItem(String item) throws ParseException {
+        requireNonNull(item);
+        String trimmedItem = item.trim();
+        if (!Item.isValidItem(trimmedItem)) {
+            throw new ParseException(Item.MESSAGE_CONSTRAINTS);
+        }
+        return new Item(trimmedItem);
+    }
+
+    /**
+     * Parses a {@code String Quantity} into an {@code Quantity}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code Quantity} is invalid.
+     */
+    public static Quantity parseQuantity(String quantity) throws ParseException {
+        requireNonNull(quantity);
+        String trimmedQuantity = quantity.trim();
+        if (!Quantity.isValidQuantity(trimmedQuantity)) {
+            throw new ParseException(Quantity.MESSAGE_CONSTRAINTS);
+        }
+        return new Quantity(trimmedQuantity);
+    }
+
+    /**
+     * Parses a {@code String Item} into an {@code Item}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code Item} is invalid.
+     */
+    public static DeliveryTime parseDeliveryTime(String deliveryTime) throws ParseException {
+        requireNonNull(deliveryTime);
+        String trimmedDeliveryTime = deliveryTime.trim();
+
+        if (!DeliveryTime.isValidFormat(trimmedDeliveryTime)) {
+            throw new ParseException(DeliveryTime.MESSAGE_CONSTRAINTS);
+        }
+
+        if (!DeliveryTime.isInFuture(trimmedDeliveryTime)) {
+            throw new ParseException(DeliveryTime.MESSAGE_CONSTRAINTS_FUTURE);
+        }
+        return new DeliveryTime(trimmedDeliveryTime);
+    }
+
+    /**
+     * Parses a {@code String Status} into an {@code Status}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code Status} is invalid.
+     */
+    public static Status parseStatus(String status) throws ParseException {
+        requireNonNull(status);
+        String trimmedStatus = status.trim();
+        try {
+            return new Status(trimmedStatus); // constructor handles uppercase + validation
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(Status.MESSAGE_CONSTRAINTS);
+        }
     }
 }
