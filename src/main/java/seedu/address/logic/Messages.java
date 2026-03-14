@@ -20,6 +20,10 @@ public class Messages {
     public static final String MESSAGE_ORDERS_LISTED_OVERVIEW = "%1$d orders listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_MISSING_CONTACT_METHOD =
+            "At least one contact method (phone, email, or address) must be provided.";
+    public static final String MESSAGE_NO_SAVED_ADDRESS =
+            "Customer has no saved address. Please specify delivery address with a/ or use a/PICKUP for pickup orders.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -38,14 +42,21 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
-                .append("; Phone: ")
-                .append(person.getPhone())
-                .append("; Email: ")
-                .append(person.getEmail())
-                .append("; Address: ")
-                .append(person.getAddress())
-                .append("; Tags: ");
+        builder.append(person.getName());
+
+        person.getPhone().ifPresent(p ->
+                builder.append("; Phone: ").append(p)
+        );
+
+        person.getEmail().ifPresent(e ->
+                builder.append("; Email: ").append(e)
+        );
+
+        person.getAddress().ifPresent(a ->
+                builder.append("; Address: ").append(a)
+        );
+
+        builder.append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();
     }

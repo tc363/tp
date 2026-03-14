@@ -96,12 +96,16 @@ public class EditCommand extends Command {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
-        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        Phone updatedPhone = getUpdatedField(editPersonDescriptor.getPhone(), personToEdit.getPhone());
+        Email updatedEmail = getUpdatedField(editPersonDescriptor.getEmail(), personToEdit.getEmail());
+        Address updatedAddress = getUpdatedField(editPersonDescriptor.getAddress(), personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+    }
+
+    private static <T> T getUpdatedField(Optional<T> descriptorField, Optional<T> originalField) {
+        return descriptorField.orElse(originalField.orElse(null));
     }
 
     @Override

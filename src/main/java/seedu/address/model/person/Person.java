@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -12,24 +13,26 @@ import seedu.address.model.tag.Tag;
 
 /**
  * Represents a Person in the address book.
- * Guarantees: details are present and not null, field values are validated, immutable.
+ * Guarantees: name and tags are present and not null, field values are validated, immutable.
+ * Phone, email, and address are optional and may be null, but at least one must be provided.
  */
 public class Person {
 
     // Identity fields
     private final Name name;
-    private final Phone phone;
-    private final Email email;
+    private final Phone phone; // can be null
+    private final Email email; // can be null
 
     // Data fields
-    private final Address address;
+    private final Address address; // can be null
     private final Set<Tag> tags = new HashSet<>();
 
     /**
-     * Every field must be present and not null.
+     * Name and tags must be present and not null.
+     * At least one of phone, email, or address must be non-null.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+        requireAllNonNull(name, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -41,16 +44,16 @@ public class Person {
         return name;
     }
 
-    public Phone getPhone() {
-        return phone;
+    public Optional<Phone> getPhone() {
+        return Optional.ofNullable(phone);
     }
 
-    public Email getEmail() {
-        return email;
+    public Optional<Email> getEmail() {
+        return Optional.ofNullable(email);
     }
 
-    public Address getAddress() {
-        return address;
+    public Optional<Address> getAddress() {
+        return Optional.ofNullable(address);
     }
 
     /**
@@ -91,9 +94,9 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
-                && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
+                && Objects.equals(phone, otherPerson.phone)
+                && Objects.equals(email, otherPerson.email)
+                && Objects.equals(address, otherPerson.address)
                 && tags.equals(otherPerson.tags);
     }
 

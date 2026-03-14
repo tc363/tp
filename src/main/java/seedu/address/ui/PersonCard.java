@@ -1,6 +1,7 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -49,11 +50,26 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        address.setText(person.getAddress().value);
-        email.setText(person.getEmail().value);
+        setOptionalLabel(phone, person.getPhone().map(p -> p.value));
+        setOptionalLabel(email, person.getEmail().map(e -> e.value));
+        setOptionalLabel(address, person.getAddress().map(a -> a.value));
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    /**
+     * Sets the label text if its value is present, otherwise hides the label.
+     */
+    private void setOptionalLabel(Label label, Optional<String> value) {
+        if (value.isPresent()) {
+            label.setText(value.get());
+            label.setVisible(true);
+            label.setManaged(true);
+        } else {
+            // Label is removed from layout
+            label.setVisible(false);
+            label.setManaged(false);
+        }
     }
 }

@@ -15,6 +15,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 public class JsonAdaptedPersonTest {
@@ -25,9 +26,9 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_TAG = "#friend";
 
     private static final String VALID_NAME = BENSON.getName().toString();
-    private static final String VALID_PHONE = BENSON.getPhone().toString();
-    private static final String VALID_EMAIL = BENSON.getEmail().toString();
-    private static final String VALID_ADDRESS = BENSON.getAddress().toString();
+    private static final String VALID_PHONE = BENSON.getPhone().map(Phone::toString).orElse(null);
+    private static final String VALID_EMAIL = BENSON.getEmail().map(Email::toString).orElse(null);
+    private static final String VALID_ADDRESS = BENSON.getAddress().map(Address::toString).orElse(null);
     private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
             .map(JsonAdaptedTag::new)
             .collect(Collectors.toList());
@@ -62,10 +63,15 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_nullPhone_throwsIllegalValueException() {
+    public void toModelType_nullPhone_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, null, VALID_EMAIL, VALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+        Person expectedPerson = new Person(
+                new Name(VALID_NAME),
+                null,
+                new Email(VALID_EMAIL),
+                new Address(VALID_ADDRESS),
+                BENSON.getTags());
+        assertEquals(expectedPerson, person.toModelType());
     }
 
     @Test
@@ -77,10 +83,15 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_nullEmail_throwsIllegalValueException() {
+    public void toModelType_nullEmail_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, null, VALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+        Person expectedPerson = new Person(
+                new Name(VALID_NAME),
+                new Phone(VALID_PHONE),
+                null,
+                new Address(VALID_ADDRESS),
+                BENSON.getTags());
+        assertEquals(expectedPerson, person.toModelType());
     }
 
     @Test
@@ -92,10 +103,15 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_nullAddress_throwsIllegalValueException() {
+    public void toModelType_nullAddress_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, null, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+        Person expectedPerson = new Person(
+                new Name(VALID_NAME),
+                new Phone(VALID_PHONE),
+                new Email(VALID_EMAIL),
+                null,
+                BENSON.getTags());
+        assertEquals(expectedPerson, person.toModelType());
     }
 
     @Test

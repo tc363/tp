@@ -43,9 +43,9 @@ public class PersonBuilder {
      */
     public PersonBuilder(Person personToCopy) {
         name = personToCopy.getName();
-        phone = personToCopy.getPhone();
-        email = personToCopy.getEmail();
-        address = personToCopy.getAddress();
+        phone = personToCopy.getPhone().orElse(null);
+        email = personToCopy.getEmail().orElse(null);
+        address = personToCopy.getAddress().orElse(null);
         tags = new HashSet<>(personToCopy.getTags());
     }
 
@@ -74,6 +74,14 @@ public class PersonBuilder {
     }
 
     /**
+     * Removes the {@code Address} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withoutAddress() {
+        this.address = null;
+        return this;
+    }
+
+    /**
      * Sets the {@code Phone} of the {@code Person} that we are building.
      */
     public PersonBuilder withPhone(String phone) {
@@ -82,10 +90,26 @@ public class PersonBuilder {
     }
 
     /**
+     * Removes the {@code Phone} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withoutPhone() {
+        this.phone = null;
+        return this;
+    }
+
+    /**
      * Sets the {@code Email} of the {@code Person} that we are building.
      */
     public PersonBuilder withEmail(String email) {
         this.email = new Email(email);
+        return this;
+    }
+
+    /**
+     * Removes the {@code Email} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withoutEmail() {
+        this.email = null;
         return this;
     }
 
