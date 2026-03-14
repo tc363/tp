@@ -1,8 +1,7 @@
 package seedu.address.model;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
@@ -78,9 +77,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void addPerson(Person p) {
         persons.add(p);
     }
-    public void addOrder(Order o) {
-        orders.add(o);
-    }
 
     /**
      * Replaces the given person {@code target} in the list with {@code editedPerson}.
@@ -102,9 +98,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void removePerson(Person key) {
         persons.remove(key);
     }
-    public void removeOrder(Order key) {
-        orders.remove(key);
-    }
+ 
 
     //// util methods
 
