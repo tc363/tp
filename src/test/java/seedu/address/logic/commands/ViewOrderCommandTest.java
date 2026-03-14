@@ -1,5 +1,12 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.testutil.TypicalOrders.ORDER_A;
+import static seedu.address.testutil.TypicalOrders.ORDER_B;
+import static seedu.address.testutil.TypicalOrders.ORDER_C;
+import static seedu.address.testutil.TypicalOrders.ORDER_D;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,13 +15,6 @@ import seedu.address.model.order.Order;
 import seedu.address.model.order.OrderList;
 import seedu.address.model.order.Status;
 import seedu.address.testutil.OrderBuilder;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.testutil.TypicalOrders.ORDER_A;
-import static seedu.address.testutil.TypicalOrders.ORDER_B;
-import static seedu.address.testutil.TypicalOrders.ORDER_C;
-import static seedu.address.testutil.TypicalOrders.ORDER_D;
 
 /**
  * Test cases for AddressBook order retrieval methods
