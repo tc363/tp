@@ -56,11 +56,14 @@ public class TypicalPersons {
             .build();
 
     // Manually added - Persons with partial contact details (for testing optional fields)
-    public static final Person AMY_PHONE_ONLY = new PersonBuilder(AMY).withoutEmail().withoutAddress().withTags().build();
+    public static final Person AMY_PHONE_ONLY =
+            new PersonBuilder(AMY).withoutEmail().withoutAddress().withTags().build();
 
-    public static final Person AMY_EMAIL_ONLY = new PersonBuilder(AMY).withoutPhone().withoutAddress().withTags().build();
+    public static final Person AMY_EMAIL_ONLY =
+            new PersonBuilder(AMY).withoutPhone().withoutAddress().withTags().build();
 
-    public static final Person AMY_ADDRESS_ONLY = new PersonBuilder(AMY).withoutPhone().withoutEmail().withTags().build();
+    public static final Person AMY_ADDRESS_ONLY =
+            new PersonBuilder(AMY).withoutPhone().withoutEmail().withTags().build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 

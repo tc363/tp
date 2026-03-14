@@ -152,16 +152,19 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, NAME_DESC_AMY + ADDRESS_DESC_AMY, new AddCommand(AMY_ADDRESS_ONLY));
 
         // only name, phone and email
-        Person ExpectedPersonWithoutAddress = new PersonBuilder(AMY_PHONE_ONLY).withEmail(VALID_EMAIL_AMY).build();
-        assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY, new AddCommand(ExpectedPersonWithoutAddress));
+        Person expectedPersonWithoutAddress = new PersonBuilder(AMY_PHONE_ONLY).withEmail(VALID_EMAIL_AMY).build();
+        assertParseSuccess(parser,
+                NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY, new AddCommand(expectedPersonWithoutAddress));
 
         // only name, phone and address
-        Person ExpectedPersonWithoutEmail = new PersonBuilder(AMY_PHONE_ONLY).withAddress(VALID_ADDRESS_AMY).build();
-        assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + ADDRESS_DESC_AMY, new AddCommand(ExpectedPersonWithoutEmail));
+        Person expectedPersonWithoutEmail = new PersonBuilder(AMY_PHONE_ONLY).withAddress(VALID_ADDRESS_AMY).build();
+        assertParseSuccess(parser,
+                NAME_DESC_AMY + PHONE_DESC_AMY + ADDRESS_DESC_AMY, new AddCommand(expectedPersonWithoutEmail));
 
         // only name, email and address
-        Person ExpectedPersonWithoutPhone = new PersonBuilder(AMY_EMAIL_ONLY).withAddress(VALID_ADDRESS_AMY).build();
-        assertParseSuccess(parser, NAME_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY, new AddCommand(ExpectedPersonWithoutPhone));
+        Person expectedPersonWithoutPhone = new PersonBuilder(AMY_EMAIL_ONLY).withAddress(VALID_ADDRESS_AMY).build();
+        assertParseSuccess(parser,
+                NAME_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY, new AddCommand(expectedPersonWithoutPhone));
     }
 
     @Test
