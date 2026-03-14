@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+
 import seedu.address.logic.commands.ViewOrderCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.order.Status;
@@ -22,7 +23,7 @@ public class ViewOrderCommandParser implements Parser<ViewOrderCommand> {
         String statusInput = args.trim().toUpperCase();
 
         if (statusInput.equals("ALL")) {
-            return new ViewOrderCommand((Status)null);
+            return new ViewOrderCommand((Status) null);
         }
 
         if (!Status.isValidStatus(statusInput)) {

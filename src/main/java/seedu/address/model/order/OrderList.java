@@ -80,9 +80,14 @@ public class OrderList {
         return internalList.contains(order);
     }
 
-    public int size() {return internalList.size();}
+    public int size() {
+        return internalList.size();
+    }
 
-    public Order get(int index) {return internalList.get(index);}
+    public Order get(int index) {
+        return internalList.get(index);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
