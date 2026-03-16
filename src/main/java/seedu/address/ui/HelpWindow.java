@@ -131,6 +131,7 @@ public class HelpWindow extends UiPart<Stage> {
         commandRow.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         Label cmdLabel = new Label(command);
         cmdLabel.getStyleClass().add("help-command");
+        cmdLabel.setMinWidth(Label.USE_PREF_SIZE);
         Label descLabel = new Label(description);
         descLabel.getStyleClass().add("help-description");
         descLabel.setWrapText(true);
