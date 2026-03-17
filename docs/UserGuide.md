@@ -196,6 +196,35 @@ Format `find-o Category-Type/Category-Keywords`
 * `find-o i/pizza` - Look for orders with item keyword "pizza"
 * `find-o a/Ang Mo Kio` - Look for orders with delivery address "Ang Mo Kio"
 
+
+### View Orders by status: `view-o`
+
+View a list of orders by their status: (PREPARING/READY/DELIVERED/CANCELLED/ALL) 
+
+Format: `view-o STATUS`
+
+* Displays all orders that match the specified status.
+* The status must be one of the following: `preparing`, `ready`, `delivered`, `cancelled`, or `all`.
+* The command is case-insensitive (e.g., `PREPARING`, `Preparing`, `prEpaRIng` are all valid).
+
+**Status Options:**
+
+| Status | Meaning |
+|--------|---------|
+| `preparing` | Orders currently being prepared |
+| `ready` | Orders ready for delivery |
+| `delivered` | Orders that have been successfully delivered |
+| `cancelled` | Orders that have been cancelled |
+| `all` | All orders in the system |
+
+**Examples:**
+
+* `view-o preparing` - Look for all orders with status "preparing"
+* `view-o ready` - Look for all orders with status "ready"
+* `view-o delivered` - Look for all orders with status "delivered"
+* `view-o cancelled` - Look for all orders with status "cancelled"
+* `view-o all` - Look for all orders regardless of status
+
 ### Clearing all entries : `clear`
 
 Clears all customers and their orders from BZNUS.

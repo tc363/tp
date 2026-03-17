@@ -16,7 +16,7 @@ public class OrderBuilder {
     public static final int DEFAULT_CUSTOMER_INDEX = 1;
     public static final String DEFAULT_ITEM = "Pizza";
     public static final String DEFAULT_QUANTITY = "1";
-    public static final String DEFAULT_DELIVERY_TIME = "2030-01-01 1800";
+    public static final String DEFAULT_DELIVERY_TIME = "2030-12-01 1800";
     public static final String DEFAULT_ADDRESS = "123 Default Street";
     public static final String DEFAULT_STATUS = "PREPARING";
 

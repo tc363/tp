@@ -25,6 +25,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.order.Order;
+import seedu.address.model.order.OrderList;
+import seedu.address.model.order.Status;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.OrderBuilder;
 
@@ -234,6 +236,16 @@ public class AddOrderCommandTest {
 
         @Override
         public ObservableList<Order> getFilteredOrderList() {
+            throw new AssertionError();
+        }
+
+        @Override
+        public OrderList getOrdersByStatus(Status status) {
+            throw new AssertionError();
+        }
+
+        @Override
+        public OrderList getAllOrders() {
             throw new AssertionError();
         }
     }

@@ -19,7 +19,7 @@ public class TypicalOrders {
             .withCustomerIndex(1)
             .withItem("Pizza")
             .withQuantity("2")
-            .withDeliveryTime("2030-01-01 1800")
+            .withDeliveryTime("2030-12-01 1800")
             .withAddress(VALID_ADDRESS_AMY)
             .withStatus("PREPARING")
             .build();
@@ -28,7 +28,7 @@ public class TypicalOrders {
             .withCustomerIndex(2)
             .withItem("Burger")
             .withQuantity("1")
-            .withDeliveryTime("2030-01-02 1230")
+            .withDeliveryTime("2030-12-02 1230")
             .withAddress(VALID_ADDRESS_BOB)
             .withStatus("PREPARING")
             .build();
@@ -37,11 +37,19 @@ public class TypicalOrders {
             .withCustomerIndex(1)
             .withItem("Sushi")
             .withQuantity("3")
-            .withDeliveryTime("2030-01-03 2000")
+            .withDeliveryTime("2030-12-03 2000")
             .withAddress(VALID_ADDRESS_AMY)
             .withStatus("DELIVERED")
             .build();
 
+    public static final Order ORDER_D = new OrderBuilder()
+            .withCustomerIndex(2)
+            .withItem("Cake")
+            .withQuantity("2")
+            .withDeliveryTime("2030-12-15 1430")
+            .withAddress(VALID_ADDRESS_AMY)
+            .withStatus("READY")
+            .build();
     private TypicalOrders() {} // prevents instantiation
 
     /**

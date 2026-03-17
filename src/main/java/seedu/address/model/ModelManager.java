@@ -13,6 +13,8 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.model.order.Order;
+import seedu.address.model.order.OrderList;
+import seedu.address.model.order.Status;
 import seedu.address.model.person.Person;
 
 /**
@@ -130,6 +132,16 @@ public class ModelManager implements Model {
     @Override
     public void deleteOrdersForCustomer(Index customerIndex) {
         addressBook.removeOrdersForCustomer(customerIndex);
+    }
+
+    @Override
+    public OrderList getOrdersByStatus(Status status) {
+        return addressBook.getOrdersByStatus(status);
+    }
+
+    @Override
+    public OrderList getAllOrders() {
+        return addressBook.getAllOrders();
     }
 
     //=========== Filtered Person List Accessors =============================================================

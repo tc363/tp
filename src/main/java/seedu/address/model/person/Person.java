@@ -42,6 +42,7 @@ public class Person {
         this.tags.addAll(tags);
     }
 
+
     public Name getName() {
         return name;
     }
@@ -61,6 +62,7 @@ public class Person {
     public Optional<Address> getAddress() {
         return Optional.ofNullable(address);
     }
+
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
