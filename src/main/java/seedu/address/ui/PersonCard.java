@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import seedu.address.model.person.Instagram;
 import seedu.address.model.person.Person;
 
 /**
@@ -40,6 +41,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label instagram;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -52,6 +55,7 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         setOptionalLabel(phone, person.getPhone().map(p -> p.value));
         setOptionalLabel(email, person.getEmail().map(e -> e.value));
+        setOptionalLabel(instagram, person.getInstagram().map(Instagram::getDisplayValue));
         setOptionalLabel(address, person.getAddress().map(a -> a.value));
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
