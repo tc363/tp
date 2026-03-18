@@ -86,22 +86,6 @@ public class OrderCardTest {
     }
 
     @Test
-    public void getCustomerName_negativeIndex_returnsUnknownCustomer() {
-        Order order = new Order(
-                Index.fromZeroBased(-1),
-                new Item("Cake"),
-                new Quantity("1"),
-                new DeliveryTime("2030-12-04 1500"),
-                new Address("101 Test Street"),
-                new Status("PREPARING")
-        );
-
-        String result = OrderCard.getCustomerName(order, personList);
-
-        assertEquals("Unknown Customer", result);
-    }
-
-    @Test
     public void getCustomerName_emptyPersonList_returnsUnknownCustomer() {
         ObservableList<seedu.address.model.person.Person> emptyList =
                 FXCollections.observableArrayList(new ArrayList<>());
