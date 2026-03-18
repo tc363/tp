@@ -24,13 +24,6 @@ public class FindOrderCommandParser implements Parser<FindOrderCommand> {
     public FindOrderCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        String trimmedArgs = args.trim();
-
-        // Check for ALL keyword
-        if (trimmedArgs.equalsIgnoreCase("ALL")) {
-            return new FindOrderCommand(predicate -> true);
-        }
-
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 args, PREFIX_ITEM, PREFIX_ADDRESS, PREFIX_CUSTOMER);
 
@@ -60,7 +53,7 @@ public class FindOrderCommandParser implements Parser<FindOrderCommand> {
             count++;
         }
 
-        // If no valid prefixes found and not ALL, throw error
+        // If no valid prefixes found, throw error
         if (count == 0) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindOrderCommand.MESSAGE_USAGE));
