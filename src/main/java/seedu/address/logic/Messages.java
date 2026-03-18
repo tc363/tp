@@ -21,7 +21,7 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_MISSING_CONTACT_METHOD =
-            "At least one contact method (phone, email, instagram or address) must be provided.";
+            "At least one contact method (phone, facebook, instagram or address) must be provided.";
     public static final String MESSAGE_NO_SAVED_ADDRESS =
             "Customer has no saved address. Please specify delivery address with a/ or use a/PICKUP for pickup orders.";
 
@@ -48,8 +48,8 @@ public class Messages {
                 builder.append("; Phone: ").append(p)
         );
 
-        person.getEmail().ifPresent(e ->
-                builder.append("; Email: ").append(e)
+        person.getFacebook().ifPresent(fb ->
+                builder.append("; Facebook: ").append(fb.getDisplayValue())
         );
 
         person.getInstagram().ifPresent(ig ->
