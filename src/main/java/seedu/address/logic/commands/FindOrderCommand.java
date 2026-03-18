@@ -22,8 +22,7 @@ public class FindOrderCommand extends Command {
             + "or customerId contain the specified search phrase (case-insensitive) "
             + "and displays them as a list with index numbers.\n"
             + "Parameters: i/ITEM_NAME | a/ADDRESS | c/CUSTOMER_ID\n"
-            + "Example: " + COMMAND_WORD + " i/pizza\n"
-            + "Or use without parameters to display all orders: " + COMMAND_WORD;
+            + "Example: " + COMMAND_WORD + " i/pizza";
 
     private final Predicate<Order> predicate;
 

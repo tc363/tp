@@ -31,6 +31,17 @@ public class FindOrderCommandParser implements Parser<FindOrderCommand> {
         Optional<String> addressSearch = argMultimap.getValue(PREFIX_ADDRESS);
         Optional<String> customerSearch = argMultimap.getValue(PREFIX_CUSTOMER);
 
+        // Check for empty values
+        if (itemSearch.isPresent() && itemSearch.get().isBlank()) {
+            throw new ParseException("Item search value cannot be empty.");
+        }
+        if (addressSearch.isPresent() && addressSearch.get().isBlank()) {
+            throw new ParseException("Address search value cannot be empty.");
+        }
+        if (customerSearch.isPresent() && customerSearch.get().isBlank()) {
+            throw new ParseException("Customer search value cannot be empty.");
+        }
+
         int count = 0;
         if (itemSearch.isPresent()) {
             count++;
@@ -42,9 +53,10 @@ public class FindOrderCommandParser implements Parser<FindOrderCommand> {
             count++;
         }
 
+        // If no valid prefixes found, throw error
         if (count == 0) {
-            // No search criteria provided - show all orders
-            return new FindOrderCommand(predicate -> true);
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindOrderCommand.MESSAGE_USAGE));
         }
 
         if (count != 1) {
