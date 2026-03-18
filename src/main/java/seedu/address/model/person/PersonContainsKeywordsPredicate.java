@@ -58,31 +58,32 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         if (searchPhrase.isEmpty()) {
             return false;
         }
+        String lowerPhrase = searchPhrase.toLowerCase();
         switch (searchType) {
         case NAME:
-            return person.getName().toString().toLowerCase().contains(searchPhrase.toLowerCase());
+            return person.getName().toString().toLowerCase().contains(lowerPhrase);
         case ADDRESS:
             return person.getAddress()
-                    .map(address -> address.toString().toLowerCase().contains(searchPhrase))
+                    .map(address -> address.toString().toLowerCase().contains(lowerPhrase))
                     .orElse(false);
         case PHONE:
             return person.getPhone()
-                .map(phone -> phone.toString().toLowerCase().contains(searchPhrase))
+                .map(phone -> phone.toString().toLowerCase().contains(lowerPhrase))
                 .orElse(false);
         case EMAIL:
             return person.getEmail()
-                    .map(email -> email.toString().toLowerCase().contains(searchPhrase))
+                    .map(email -> email.toString().toLowerCase().contains(lowerPhrase))
                     .orElse(false);
         case TAG:
             return person.getTags().stream()
-                    .anyMatch(tag -> tag.toString().toLowerCase().contains(searchPhrase.toLowerCase()));
+                    .anyMatch(tag -> tag.toString().toLowerCase().contains(lowerPhrase));
         case INSTAGRAM:
             return person.getInstagram()
-                    .map(ig -> ig.toString().toLowerCase().contains(searchPhrase))
+                    .map(ig -> ig.toString().toLowerCase().contains(lowerPhrase))
                     .orElse(false);
         case REMARK:
             return person.getRemark()
-                    .map(remark -> remark.toString().toLowerCase().contains(searchPhrase))
+                    .map(remark -> remark.toString().toLowerCase().contains(lowerPhrase))
                     .orElse(false);
         default:
             return false;

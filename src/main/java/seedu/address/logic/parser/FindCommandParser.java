@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.stream.Stream;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.PersonContainsKeywordsPredicate;
@@ -39,6 +40,18 @@ public class FindCommandParser implements Parser<FindCommand> {
             return new FindCommand(new PersonContainsKeywordsPredicate(trimmedArgs));
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
+
+        long prefixCount = Stream.of(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                        PREFIX_ADDRESS, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK)
+                .filter(prefix -> argMultimap.getValue(prefix).isPresent())
+                .count();
+
+        if (prefixCount > 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    "Please only provide one prefix at a time.\n" + FindCommand.MESSAGE_USAGE));
+        }
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
             return new FindCommand(new PersonContainsKeywordsPredicate(
                     getNonEmptyValue(argMultimap, PREFIX_NAME),
