@@ -15,6 +15,7 @@ import seedu.address.model.order.Quantity;
 import seedu.address.model.order.Status;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Instagram;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -97,6 +98,21 @@ public class ParserUtil {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
         return new Email(trimmedEmail);
+    }
+
+    /**
+     * Parses a {@code String instagram} into an {@code Instagram}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code instagram} handle is invalid.
+     */
+    public static Instagram parseInstagram(String instagram) throws ParseException {
+        requireNonNull(instagram);
+        String trimmedInstagram = instagram.trim();
+        if (!Instagram.isValidInstagram(trimmedInstagram)) {
+            throw new ParseException(Instagram.MESSAGE_CONSTRAINTS);
+        }
+        return new Instagram(trimmedInstagram);
     }
 
     /**

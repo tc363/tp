@@ -13,15 +13,15 @@ import seedu.address.model.person.Person;
  */
 public class Messages {
 
-    public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
+    public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command.";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The customer index provided is invalid";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The customer index provided is invalid.";
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_ORDERS_LISTED_OVERVIEW = "%1$d orders listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_MISSING_CONTACT_METHOD =
-            "At least one contact method (phone, email, or address) must be provided.";
+            "At least one contact method (phone, email, instagram or address) must be provided.";
     public static final String MESSAGE_NO_SAVED_ADDRESS =
             "Customer has no saved address. Please specify delivery address with a/ or use a/PICKUP for pickup orders.";
 
@@ -50,6 +50,10 @@ public class Messages {
 
         person.getEmail().ifPresent(e ->
                 builder.append("; Email: ").append(e)
+        );
+
+        person.getInstagram().ifPresent(ig ->
+                builder.append("; Instagram: ").append(ig.getDisplayValue())
         );
 
         person.getAddress().ifPresent(a ->

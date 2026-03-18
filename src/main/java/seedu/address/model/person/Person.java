@@ -22,6 +22,7 @@ public class Person {
     private final Name name;
     private final Phone phone; // can be null
     private final Email email; // can be null
+    private final Instagram instagram; // can be null
 
     // Data fields
     private final Address address; // can be null
@@ -31,11 +32,12 @@ public class Person {
      * Name and tags must be present and not null.
      * At least one of phone, email, or address must be non-null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Instagram instagram, Address address, Set<Tag> tags) {
         requireAllNonNull(name, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.instagram = instagram;
         this.address = address;
         this.tags.addAll(tags);
     }
@@ -51,6 +53,10 @@ public class Person {
 
     public Optional<Email> getEmail() {
         return Optional.ofNullable(email);
+    }
+
+    public Optional<Instagram> getInstagram() {
+        return Optional.ofNullable(instagram);
     }
 
     public Optional<Address> getAddress() {
@@ -98,6 +104,7 @@ public class Person {
         return name.equals(otherPerson.name)
                 && Objects.equals(phone, otherPerson.phone)
                 && Objects.equals(email, otherPerson.email)
+                && Objects.equals(instagram, otherPerson.instagram)
                 && Objects.equals(address, otherPerson.address)
                 && tags.equals(otherPerson.tags);
     }
@@ -105,7 +112,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, instagram, address, tags);
     }
 
     @Override
@@ -114,6 +121,7 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
+                .add("instagram", instagram)
                 .add("address", address)
                 .add("tags", tags)
                 .toString();
