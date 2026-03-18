@@ -53,9 +53,13 @@ public class OrderCard extends UiPart<Region> {
      * Returns the customer name for the given order by looking up the customer index.
      */
     static String getCustomerName(Order order, ObservableList<Person> personList) {
-        int customerIndex = order.getCustomerIndex().getZeroBased();
-        if (customerIndex >= 0 && customerIndex < personList.size()) {
-            return personList.get(customerIndex).getName().fullName;
+        try {
+            int customerIndex = order.getCustomerIndex().getZeroBased();
+            if (customerIndex >= 0 && customerIndex < personList.size()) {
+                return personList.get(customerIndex).getName().fullName;
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // Invalid index, return unknown customer
         }
         return "Unknown Customer";
     }
