@@ -228,7 +228,7 @@ Format: `delete-o ORDER_INDEX`
 * The index **must be positive integers** 1, 2, 3, …​
 
 **Examples:**
-* `view-o` followed by `delete-o 3` deletes the 3rd order in the results of the `view-o` command.
+* `list-o` followed by `delete-o 3` deletes the 3rd order in the results of the `list-o` command.
 * `find-o i/pizza` followed by `delete-o 1` deletes the 1st order in the results of the `find-o` command.
 
 ---
@@ -304,7 +304,7 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add Order**| `order INDEX i/ITEM_NAME q/QUANTITY at/DELIVERY_TIME [a/DELIVERY_ADDRESS] [s/STATUS]` <br> e.g., `order 3 i/Pizza q/3 at/2026-04-02 1200 a/123 Jurong West St 42, #05-01 s/PREPARING`
 **Find Order** | `find-o Category-Type/Category-Keywords` <br> e.g., `find-o i/pizza`
-**View Orders** | `view-o STATUS` <br> e.g., `view-o preparing` or `view-o all`
+**List Orders** | `list-o`
 **Delete Order** | `delete-o ORDER_INDEX` <br> e.g., `delete-o 1`
 
 ### Other Commands
