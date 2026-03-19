@@ -66,6 +66,21 @@ public class FindOrderCommandTest {
     }
 
     @Test
+    public void execute_validOrderStatus_commandExecutes() throws CommandException {
+        Model model = new ModelManager(
+                new AddressBookBuilder().withOrder(ORDER_A).withOrder(ORDER_B).build(),
+                new UserPrefs());
+
+        FindOrderCommand command = new FindOrderCommand(
+                new OrderContainsKeywordsPredicate(OrderContainsKeywordsPredicate.SearchType.STATUS, "PREPARING"));
+
+        CommandResult result = command.execute(model);
+
+        assertNotNull(result);
+        assertTrue(result.getFeedbackToUser().contains("=== FIND ORDERS ==="));
+    }
+
+    @Test
     public void equals_samePredicate_returnsTrue() {
         OrderContainsKeywordsPredicate predicate = new OrderContainsKeywordsPredicate(
                 OrderContainsKeywordsPredicate.SearchType.ITEM, "pizza");

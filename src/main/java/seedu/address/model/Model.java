@@ -7,8 +7,6 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.order.Order;
-import seedu.address.model.order.OrderList;
-import seedu.address.model.order.Status;
 import seedu.address.model.person.Person;
 
 /**
@@ -109,15 +107,5 @@ public interface Model {
      * Removes all orders belonging to the customer identified by {@code customerId}.
      */
     void deleteOrdersForCustomer(UUID customerId);
-
-    /**
-     * Gets all orders by with a specific status across all customers
-     */
-    OrderList getOrdersByStatus(Status status);
-
-    /**
-     * Gets all orders across all customers
-     */
-    OrderList getAllOrders();
 
 }

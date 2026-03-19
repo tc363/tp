@@ -202,8 +202,8 @@ Format: `find-o Category-Type/Category-Keywords`
 
 * Find the orders given the `Category-Keywords` from the `Category-Type`.
 * The category keywords refer to the keyword used to look for orders.
-* The category type refers to one of the 3 category options shown above.
-* The category type **must be one of i/a/c/s**, which are respectively item, address, customer.
+* The category type refers to one of the 4 category options shown above.
+* The category type **must be one of i/a/c/s**, which are respectively item, address, customer, status.
 * This command will only accept one keyword, do not input multiple keywords.
 
 **Examples:**
@@ -211,32 +211,11 @@ Format: `find-o Category-Type/Category-Keywords`
 * `find-o a/Ang Mo Kio` - Look for orders with delivery address "Ang Mo Kio"
 * `find-o s/Delivered` - Look for orders that are already delivered
 
-### Viewing orders by status: `view-o`
+### Listing all orders : `list-o`
 
-View a list of orders by their status: (PREPARING/READY/DELIVERED/CANCELLED/ALL) 
+Shows a list of all orders in the address book.
 
-Format: `view-o STATUS`
-
-* Displays all orders that match the specified status.
-* The status must be one of the following: `preparing`, `ready`, `delivered`, `cancelled`, or `all`.
-* The command is case-insensitive (e.g., `PREPARING`, `Preparing`, `prEpaRIng` are all valid).
-
-**Status Options:**
-
-| Status | Meaning |
-|--------|---------|
-| `preparing` | Orders currently being prepared |
-| `ready` | Orders ready for delivery |
-| `delivered` | Orders that have been successfully delivered |
-| `cancelled` | Orders that have been cancelled |
-| `all` | All orders in the system |
-
-**Examples:**
-* `view-o preparing` - Look for all orders with status "preparing"
-* `view-o ready` - Look for all orders with status "ready"
-* `view-o delivered` - Look for all orders with status "delivered"
-* `view-o cancelled` - Look for all orders with status "cancelled"
-* `view-o all` - Look for all orders regardless of status
+Format: `list-o`
 
 ### Deleting an order: `delete-o`
 
@@ -249,7 +228,7 @@ Format: `delete-o ORDER_INDEX`
 * The index **must be positive integers** 1, 2, 3, …​
 
 **Examples:**
-* `view-o` followed by `delete-o 3` deletes the 3rd order in the results of the `view-o` command.
+* `list-o` followed by `delete-o 3` deletes the 3rd order in the results of the `list-o` command.
 * `find-o i/pizza` followed by `delete-o 1` deletes the 1st order in the results of the `find-o` command.
 
 ---
@@ -325,7 +304,7 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add Order**| `order INDEX i/ITEM_NAME q/QUANTITY at/DELIVERY_TIME [a/DELIVERY_ADDRESS] [s/STATUS]` <br> e.g., `order 3 i/Pizza q/3 at/2026-04-02 1200 a/123 Jurong West St 42, #05-01 s/PREPARING`
 **Find Order** | `find-o Category-Type/Category-Keywords` <br> e.g., `find-o i/pizza`
-**View Orders** | `view-o STATUS` <br> e.g., `view-o preparing` or `view-o all`
+**List Orders** | `list-o`
 **Delete Order** | `delete-o ORDER_INDEX` <br> e.g., `delete-o 1`
 
 ### Other Commands

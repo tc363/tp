@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.order.Order;
 import seedu.address.model.order.OrderList;
-import seedu.address.model.order.Status;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -128,31 +127,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         orders.removeOrdersForCustomer(customerId);
     }
 
-    /**
-     * Gets all orders by with a specific status{@code status} across all customers
-     */
-    public OrderList getOrdersByStatus(Status status) {
-        OrderList filteredOrders = new OrderList();
-        for (int i = 0; i < orders.size(); i++) {
-            Order order = orders.get(i);
-            if (order.getStatus().equals(status)) {
-                filteredOrders.add(order);
-            }
-        }
-        return filteredOrders;
-    }
-
-    /**
-     * Gets all order across all customers
-     */
-    public OrderList getAllOrders() {
-        OrderList allOrders = new OrderList();
-        for (int i = 0; i < orders.size(); i++) {
-            Order order = orders.get(i);
-            allOrders.add(order);
-        }
-        return allOrders;
-    }
     //// util methods
 
     @Override

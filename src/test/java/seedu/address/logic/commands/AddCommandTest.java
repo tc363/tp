@@ -24,8 +24,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.order.Order;
-import seedu.address.model.order.OrderList;
-import seedu.address.model.order.Status;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -192,15 +190,6 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
-        @Override
-        public OrderList getOrdersByStatus(Status status) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public OrderList getAllOrders() {
-            throw new AssertionError("This method should not be called.");
-        }
     }
 
 

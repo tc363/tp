@@ -20,10 +20,10 @@ public class FindOrderCommand extends Command {
 
     public static final String COMMAND_WORD = "find-o";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all orders whose item, address, "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all orders whose item, address, status, "
             + "or customerId contain the specified search phrase (case-insensitive) "
             + "and displays them as a list with index numbers.\n"
-            + "Parameters: i/ITEM_NAME | a/ADDRESS | c/CUSTOMER_ID\n"
+            + "Parameters: i/ITEM_NAME | a/ADDRESS | c/CUSTOMER_ID | s/STATUS\n"
             + "Example: " + COMMAND_WORD + " i/pizza";
 
     private final OrderContainsKeywordsPredicate predicate;

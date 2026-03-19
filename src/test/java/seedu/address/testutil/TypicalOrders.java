@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import seedu.address.model.AddressBook;
 import seedu.address.model.order.Order;
 
 /**
@@ -52,7 +53,16 @@ public class TypicalOrders {
             .withStatus("READY")
             .build();
 
-    private TypicalOrders() {} // prevents instantiation
+    /**
+     * Returns an {@code Addressbook} with all the typical orders.
+     */
+    public static AddressBook getTypicalAddressbook() {
+        AddressBook ab = new AddressBook();
+        for (Order order : getTypicalOrders()) {
+            ab.addOrder(order);
+        }
+        return ab;
+    }
 
     public static List<Order> getTypicalOrders() {
         return new ArrayList<>(Arrays.asList(ORDER_A, ORDER_B, ORDER_C));

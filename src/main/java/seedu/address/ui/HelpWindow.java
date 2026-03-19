@@ -98,14 +98,14 @@ public class HelpWindow extends UiPart<Stage> {
                 "delete-o ORDER_INDEX",
                 "delete-o 1");
 
-        addCommandBlock("find-o", "Search for different orders with 3 category options: "
-                + "item name, delivery address, customer id",
+        addCommandBlock("find-o", "Search for different orders with 4 category options: "
+                + "item name, delivery address, customer id, status",
                 "find-o Category-Type/Category-Keywords",
                 "find-o i/pizza");
 
-        addCommandBlock("view-o", "View a list of orders by their status: (PREPARING/READY/DELIVERED/CANCELLED/ALL)",
-                "view-o STATUS",
-                "view-o preparing");
+        addCommandBlock("list-o", "Shows a list of all orders in the address book.",
+                "list-o",
+                "list-o");
 
         addCommandBlock("clear", "Clears all customers and their orders from BZNUS.",
                 "clear",
