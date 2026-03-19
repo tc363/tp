@@ -154,13 +154,16 @@ public class CommandTestUtil {
     }
 
     /**
-     * Updates {@code model}'s filtered list to show only the order at the given {@code targetIndex}.
+     * Updates {@code model}'s filtered order list to show only the order at the given {@code targetIndex}.
      */
     public static void showOrderAtIndex(Model model, Index targetIndex) {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredOrderList().size());
 
         Order order = model.getFilteredOrderList().get(targetIndex.getZeroBased());
         model.updateFilteredOrderList(o -> o.equals(order));
+
         assertEquals(1, model.getFilteredOrderList().size());
     }
+
+
 }

@@ -1,11 +1,11 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.commons.core.index.Index;
 import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 
@@ -90,6 +90,8 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
     void updateFilteredOrderList(Predicate<Order> predicate);
 
+    Person findPersonById(UUID id);
+
     /**
      * Adds the given {@code order}.
      */
@@ -102,11 +104,8 @@ public interface Model {
     void deleteOrder(Order order);
 
     /**
-     * Removes all orders belonging to the customer identified by {@code customerIndex}.
+     * Removes all orders belonging to the customer identified by {@code customerId}.
      */
-    void deleteOrdersForCustomer(Index customerIndex);
-
-    /** Returns an unmodifiable view of the order list */
-    ObservableList<Order> getOrderList();
+    void deleteOrdersForCustomer(UUID customerId);
 
 }
