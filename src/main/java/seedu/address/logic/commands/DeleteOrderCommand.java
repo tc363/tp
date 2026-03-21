@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -14,6 +16,8 @@ import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 
 public class DeleteOrderCommand extends Command {
+    private static final Logger logger = Logger.getLogger(DeleteOrderCommand.class.getName());
+
     public static final String COMMAND_WORD = "delete-o";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -33,18 +37,25 @@ public class DeleteOrderCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
+        logger.log(Level.INFO, "Executing DeleteOrderCommand for index: " + targetIndex);
+
         List<Order> lastShownList = model.getFilteredOrderList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            logger.log(Level.WARNING, "Invalid order index: " + targetIndex);
             throw new CommandException(Messages.MESSAGE_INVALID_ORDER_DISPLAYED_INDEX);
         }
 
         Order orderToDelete = lastShownList.get(targetIndex.getZeroBased());
+        assert orderToDelete != null : "Order should exist after index validation";
+
+        logger.log(Level.INFO, "Deleting order: " + orderToDelete);
         model.deleteOrder(orderToDelete);
 
         // Get the customer name for formatting
         UUID customerId = orderToDelete.getCustomerId();
         Person customer = model.findPersonById(customerId);
+        assert customer != null : "Customer should exist for the given order";
         String customerName = customer.getName().fullName;
 
         return new CommandResult(String.format(MESSAGE_DELETE_ORDER_SUCCESS, Messages.format(orderToDelete, customerName)));
