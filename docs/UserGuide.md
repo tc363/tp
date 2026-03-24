@@ -14,7 +14,7 @@ BZNUS is a **desktop app for tracking customer contacts, food orders and custome
 --------------------------------------------------------------------------------------------------------------------
 
 
-## Content summery
+## Table of Contents
 1. [Quick start](#quick-start)
 2. [Features](#features)
 * command format
@@ -30,7 +30,6 @@ BZNUS is a **desktop app for tracking customer contacts, food orders and custome
 * find-o
 * list-o
 * delete-o
-* edit-o
 5. [Other command](#order-commands)
 * clear
 * exit
