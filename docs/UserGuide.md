@@ -431,8 +431,8 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add Order**| `order INDEX i/ITEM_NAME q/QUANTITY at/DELIVERY_TIME [a/DELIVERY_ADDRESS] [s/STATUS]` <br> e.g., `order 3 i/Pizza q/3 at/2026-04-02 1200 a/123 Jurong West St 42, #05-01 s/PREPARING`
 **Find Order** | `find-o Category-Type/Category-Keywords` <br> e.g., `find-o i/pizza`
-**List Orders** | `list-o`
 **Edit Order** | `edit-o ORDER_INDEX [i/ITEM_NAME] [q/QUANTITY] [at/DATE] [a/DELIVERY_ADDRESS] [s/STATUS]` <br> e.g., `edit-o 2 q/5 s/READY`
+**List Orders** | `list-o`
 **Delete Order** | `delete-o ORDER_INDEX` <br> e.g., `delete-o 1`
 
 ### <a id="others"></a>Other Commands
