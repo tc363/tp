@@ -171,11 +171,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons);
+        return persons.equals(otherAddressBook.persons)
+                && orders.equals(otherAddressBook.orders);
     }
 
     @Override
     public int hashCode() {
-        return persons.hashCode();
+        return java.util.Objects.hash(persons, orders);
     }
 }

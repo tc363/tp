@@ -25,6 +25,7 @@ import seedu.address.model.Model;
 import seedu.address.model.order.Order;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.testutil.EditOrderDescriptorBuilder;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -47,9 +48,13 @@ public class CommandTestUtil {
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_ITEM_PIZZA = "Pizza";
+    public static final String VALID_ITEM_BURGER = "Burger";
     public static final String VALID_QUANTITY_3 = "3";
+    public static final String VALID_QUANTITY_5 = "5";
     public static final String VALID_DATETIME_2030 = "2030-01-01 1800";
+    public static final String VALID_DATETIME_2031 = "2031-06-15 1400";
     public static final String VALID_STATUS_PREPARING = "PREPARING";
+    public static final String VALID_STATUS_READY = "READY";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -66,9 +71,13 @@ public class CommandTestUtil {
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
     public static final String ITEM_DESC_PIZZA = " " + PREFIX_ITEM + VALID_ITEM_PIZZA;
+    public static final String ITEM_DESC_BURGER = " " + PREFIX_ITEM + VALID_ITEM_BURGER;
     public static final String QUANTITY_DESC_3 = " " + PREFIX_QUANTITY + VALID_QUANTITY_3;
+    public static final String QUANTITY_DESC_5 = " " + PREFIX_QUANTITY + VALID_QUANTITY_5;
     public static final String DATETIME_DESC_2030 = " " + PREFIX_DATETIME + VALID_DATETIME_2030;
+    public static final String DATETIME_DESC_2031 = " " + PREFIX_DATETIME + VALID_DATETIME_2031;
     public static final String STATUS_DESC_PREPARING = " " + PREFIX_STATUS + VALID_STATUS_PREPARING;
+    public static final String STATUS_DESC_READY = " " + PREFIX_STATUS + VALID_STATUS_READY;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
@@ -78,6 +87,7 @@ public class CommandTestUtil {
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_REMARK_DESC = " " + PREFIX_REMARK; // empty string not allowed for remarks
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
+    public static final String INVALID_ITEM_DESC = " " + PREFIX_ITEM + "P!zza"; // '!' not allowed in item names
     public static final String INVALID_QUANTITY_DESC = " " + PREFIX_QUANTITY + "abc"; // not a number
     public static final String INVALID_DATETIME_DESC = " " + PREFIX_DATETIME + "not-a-date"; // invalid format
     public static final String INVALID_STATUS_DESC = " " + PREFIX_STATUS + "UNKNOWN"; // not allowed
@@ -87,6 +97,8 @@ public class CommandTestUtil {
 
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
+    public static final EditOrderCommand.EditOrderDescriptor DESC_ORDER_A;
+    public static final EditOrderCommand.EditOrderDescriptor DESC_ORDER_B;
 
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
@@ -95,6 +107,12 @@ public class CommandTestUtil {
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withFacebook(VALID_FACEBOOK_BOB).withInstagram(VALID_INSTAGRAM_BOB)
                 .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+        DESC_ORDER_A = new EditOrderDescriptorBuilder().withItem(VALID_ITEM_PIZZA)
+                .withQuantity(VALID_QUANTITY_3).withDeliveryTime(VALID_DATETIME_2030)
+                .withAddress(VALID_ADDRESS_AMY).withStatus(VALID_STATUS_PREPARING).build();
+        DESC_ORDER_B = new EditOrderDescriptorBuilder().withItem(VALID_ITEM_BURGER)
+                .withQuantity(VALID_QUANTITY_5).withDeliveryTime(VALID_DATETIME_2031)
+                .withAddress(VALID_ADDRESS_BOB).withStatus(VALID_STATUS_READY).build();
     }
 
     /**
