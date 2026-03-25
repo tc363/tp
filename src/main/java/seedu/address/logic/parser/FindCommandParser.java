@@ -43,6 +43,19 @@ public class FindCommandParser implements Parser<FindCommand> {
         // --- Part B: Specific Search (Prefixes) ---
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE,
                 PREFIX_ADDRESS, PREFIX_FACEBOOK, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
+        Prefix[] prefixesToToValidate = {
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TAG,
+                PREFIX_FACEBOOK, PREFIX_INSTAGRAM, PREFIX_REMARK
+        };
+
+        for (Prefix prefix : prefixesToToValidate) {
+            if (argMultimap.getValue(prefix).isPresent()) {
+                String value = argMultimap.getValue(prefix).get().trim();
+                if (value.isEmpty()) {
+                    throw new ParseException("Search value for " + prefix.getPrefix() + " cannot be empty");
+                }
+            }
+        }
 
         return new FindCommand(new PersonContainsKeywordsPredicate(args, false));
     }

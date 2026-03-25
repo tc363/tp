@@ -46,4 +46,11 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, " z/Unknown", expectedCommand);
     }
 
+    @Test
+    public void parse_emptyPrefixValue_throwsParseException() {
+        assertParseFailure(parser, " n/ ", "Search value for n/ cannot be empty");
+
+        assertParseFailure(parser, " p/ ", "Search value for p/ cannot be empty");
+    }
+
 }
