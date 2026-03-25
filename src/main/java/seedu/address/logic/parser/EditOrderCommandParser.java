@@ -3,17 +3,15 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ITEM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_QUANTITY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DATETIME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditOrderCommand;
 import seedu.address.logic.commands.EditOrderCommand.EditOrderDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.logic.commands.EditOrderCommand;
 
 /**
  * Parses input arguments and creates a new EditOrderCommand object
@@ -43,7 +41,7 @@ public class EditOrderCommandParser implements Parser<EditOrderCommand> {
 
         EditOrderDescriptor editOrderDescriptor = new EditOrderDescriptor();
 
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
+        if (argMultimap.getValue(PREFIX_ITEM).isPresent()) {
             editOrderDescriptor.setItem(ParserUtil.parseItem(argMultimap.getValue(PREFIX_ITEM).get()));
         }
         if (argMultimap.getValue(PREFIX_QUANTITY).isPresent()) {
