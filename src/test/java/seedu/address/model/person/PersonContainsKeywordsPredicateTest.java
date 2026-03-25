@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,28 @@ public class PersonContainsKeywordsPredicateTest {
 
         // different search phrase -> returns false
         assertFalse(firstPredicate.equals(secondPredicate));
+
+        // same phrase but general vs field-specific search -> not equal
+        PersonContainsKeywordsPredicate generalAlice = new PersonContainsKeywordsPredicate("Alice");
+        PersonContainsKeywordsPredicate nameAlice = new PersonContainsKeywordsPredicate("Alice",
+                PersonContainsKeywordsPredicate.SearchType.NAME);
+        assertFalse(generalAlice.equals(nameAlice));
+    }
+
+    @Test
+    public void nullSearchPhrase_constructorThrows() {
+        assertThrows(NullPointerException.class, () -> new PersonContainsKeywordsPredicate(null));
+    }
+
+    @Test
+    public void nullSearchType_specificConstructorThrows() {
+        assertThrows(NullPointerException.class, () -> new PersonContainsKeywordsPredicate("x", null));
+    }
+
+    @Test
+    public void nullPerson_testThrows() {
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("any");
+        assertThrows(NullPointerException.class, () -> predicate.test(null));
     }
 
     @Test
@@ -106,7 +129,7 @@ public class PersonContainsKeywordsPredicateTest {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("testing phrase");
 
         String expected = PersonContainsKeywordsPredicate.class.getCanonicalName()
-                + "{searchPhrase=testing phrase}";
+                + "{searchPhrase=testing phrase, generalSearch=true, searchType=null}";
         assertEquals(expected, predicate.toString());
     }
 }

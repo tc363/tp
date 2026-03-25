@@ -1,5 +1,8 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
+
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -20,6 +23,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
     /** Constructor for General Search */
     public PersonContainsKeywordsPredicate(String searchPhrase) {
+        requireNonNull(searchPhrase, "Search phrase cannot be null");
         this.searchPhrase = searchPhrase;
         this.isGeneralSearch = true;
         this.searchType = null;
@@ -27,6 +31,8 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
     /** Constructor for Specific Search */
     public PersonContainsKeywordsPredicate(String searchPhrase, SearchType searchType) {
+        requireNonNull(searchPhrase, "Search phrase cannot be null");
+        requireNonNull(searchType, "Search type cannot be null for field-specific search");
         this.searchPhrase = searchPhrase;
         this.isGeneralSearch = false;
         this.searchType = searchType;
@@ -34,9 +40,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        requireNonNull(person, "Person cannot be null");
         if (isGeneralSearch) {
             return testGeneral(person);
         }
+        assert searchType != null : "Specific search must have a non-null search type";
         return testSpecific(person);
     }
 
@@ -88,7 +96,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                     .map(remark -> remark.toString().toLowerCase().contains(lowerPhrase))
                     .orElse(false);
         default:
-            return false;
+            throw new AssertionError("Unhandled search type: " + searchType);
         }
     }
 
@@ -104,11 +112,22 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
-        return searchPhrase.equals(otherPredicate.searchPhrase);
+        return searchPhrase.equals(otherPredicate.searchPhrase)
+                && isGeneralSearch == otherPredicate.isGeneralSearch
+                && Objects.equals(searchType, otherPredicate.searchType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(searchPhrase, isGeneralSearch, searchType);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("searchPhrase", searchPhrase).toString();
+        return new ToStringBuilder(this)
+                .add("searchPhrase", searchPhrase)
+                .add("generalSearch", isGeneralSearch)
+                .add("searchType", searchType)
+                .toString();
     }
 }

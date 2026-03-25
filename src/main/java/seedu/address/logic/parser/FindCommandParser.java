@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_FACEBOOK;
@@ -26,6 +27,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
+        requireNonNull(args, "Find command arguments cannot be null");
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(
@@ -102,6 +104,8 @@ public class FindCommandParser implements Parser<FindCommand> {
      * Helper function to make sure the input value is non-empty.
      */
     private String getNonEmptyValue(ArgumentMultimap argMultimap, Prefix prefix) throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(prefix);
         String value = argMultimap.getValue(prefix).get().trim();
         if (value.isEmpty()) {
             throw new ParseException(
