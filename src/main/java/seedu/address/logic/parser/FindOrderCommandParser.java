@@ -14,6 +14,7 @@ import java.util.Optional;
 import seedu.address.logic.commands.FindOrderCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.order.OrderContainsKeywordsPredicate;
+import seedu.address.model.order.Status;
 
 /**
  * Parses input arguments and creates a new FindOrderCommand object
@@ -90,10 +91,8 @@ public class FindOrderCommandParser implements Parser<FindOrderCommand> {
 
         if (statusSearch.isPresent()) {
             String statusInput = statusSearch.get().toUpperCase();
-            List<String> validStatuses = Arrays.asList("PREPARING", "READY", "DELIVERED", "CANCELLED");
-            if (!validStatuses.contains(statusInput)) {
-                throw new ParseException(String.format(
-                        "Invalid status! Search only allows: %s", String.join(", ", validStatuses)));
+            if (!Status.isValidStatus(statusInput)) {
+                throw new ParseException(Status.MESSAGE_CONSTRAINTS);
             }
             return new FindOrderCommand(
                     new OrderContainsKeywordsPredicate(

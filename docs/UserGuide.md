@@ -209,7 +209,7 @@ Format: `find PREFIX/KEYWORD`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Limits the search to a single specified field.
-* Allow to search with multiple prefixes.
+* Allows searching with multiple prefixes.
 
 Available Prefixes:
 * `n/NAME`
@@ -223,7 +223,7 @@ Available Prefixes:
 Examples:
 * `find n/Alice` returns all customers whose name contains `Alice`.
 * `find t/regular` returns all customers whose tags contain `regular`.
-* `find n/Bob r/non-spicy` returns all customers whose name contain `Bob` and with remark `non-spicy`.
+* `find n/Bob r/non-spicy` returns all customers whose name contains `Bob` and whose remark contains `non-spicy`.
 
 </div>
 

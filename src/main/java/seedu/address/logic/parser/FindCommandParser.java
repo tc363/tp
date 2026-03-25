@@ -43,11 +43,11 @@ public class FindCommandParser implements Parser<FindCommand> {
         // --- Part B: Specific Search (Prefixes) ---
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE,
                 PREFIX_ADDRESS, PREFIX_FACEBOOK, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
-        Prefix[] prefixesToToValidate = {PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS,
+        Prefix[] prefixesToValidate = {PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS,
             PREFIX_TAG, PREFIX_FACEBOOK, PREFIX_INSTAGRAM, PREFIX_REMARK
         };
 
-        for (Prefix prefix : prefixesToToValidate) {
+        for (Prefix prefix : prefixesToValidate) {
             if (argMultimap.getValue(prefix).isPresent()) {
                 String value = argMultimap.getValue(prefix).get().trim();
                 if (value.isEmpty()) {
