@@ -69,7 +69,7 @@ public class AddressBookParserTest {
         String searchPhrase = "foo bar baz";
         FindCommand command = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_WORD + " " + searchPhrase);
-        assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(searchPhrase)), command);
+        assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(searchPhrase, true)), command);
     }
 
     @Test

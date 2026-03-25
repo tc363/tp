@@ -21,7 +21,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_validArgs_returnsFindCommand() {
         FindCommand expectedFindCommand =
-                new FindCommand(new PersonContainsKeywordsPredicate("Alex Yeoh"));
+                new FindCommand(new PersonContainsKeywordsPredicate("Alex Yeoh", true));
         assertParseSuccess(parser, "Alex Yeoh", expectedFindCommand);
 
         // leading and trailing whitespaces are trimmed
@@ -31,8 +31,8 @@ public class FindCommandParserTest {
     @Test
     public void parse_validSpecificArgs_returnsFindCommand() {
         PersonContainsKeywordsPredicate expectedPredicate =
-                new PersonContainsKeywordsPredicate("Alice",
-                        PersonContainsKeywordsPredicate.SearchType.NAME);
+                new PersonContainsKeywordsPredicate(" n/Alice",
+                        false);
         FindCommand expectedCommand = new FindCommand(expectedPredicate);
 
         assertParseSuccess(parser, " n/Alice", expectedCommand);
@@ -41,7 +41,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_unknownPrefix_treatedAsKeywords() {
         PersonContainsKeywordsPredicate expectedPredicate =
-                new PersonContainsKeywordsPredicate("z/Unknown");
+                new PersonContainsKeywordsPredicate("z/Unknown", true);
         FindCommand expectedCommand = new FindCommand(expectedPredicate);
         assertParseSuccess(parser, " z/Unknown", expectedCommand);
     }

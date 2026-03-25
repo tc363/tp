@@ -1,9 +1,20 @@
 package seedu.address.model.person;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FACEBOOK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INSTAGRAM;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.parser.ArgumentMultimap;
+import seedu.address.logic.parser.ArgumentTokenizer;
 
 /**
  * Tests that a {@code Person}'s fields contain the given search phrase as a case-insensitive substring.
@@ -17,20 +28,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
     private final String searchPhrase;
     private final boolean isGeneralSearch;
-    private final List<Predicate<Person>> predicateList;
 
     /** Constructor for General Search */
-    public PersonContainsKeywordsPredicate(String searchPhrase) {
+    public PersonContainsKeywordsPredicate(String searchPhrase, boolean isGeneralSearch) {
         this.searchPhrase = searchPhrase;
-        this.isGeneralSearch = true;
-        this.predicateList = null;
-    }
-
-    /** Constructor for Specific Search */
-    public PersonContainsKeywordsPredicate(List<Predicate<Person>> predicateList) {
-        this.searchPhrase = null;
-        this.isGeneralSearch = false;
-        this.predicateList = predicateList;
+        this.isGeneralSearch = isGeneralSearch;
     }
 
     @Override
@@ -57,8 +59,48 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(tag -> tag.tagName.toLowerCase().contains(lowerPhrase));
     }
 
-    private boolean testSpecific(Person person) {
-        return predicateList.stream().allMatch(p -> p.test(person));
+    private boolean testSpecific(Person customer) {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                searchPhrase, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_FACEBOOK,
+                PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
+
+        List<Predicate<Person>> predicateList = new ArrayList<>();
+
+        argMultimap.getValue(PREFIX_NAME).ifPresent(name ->
+                predicateList.add(person -> person.getName().fullName.toLowerCase().contains(name.toLowerCase()))
+        );
+
+        argMultimap.getValue(PREFIX_ADDRESS).ifPresent(address ->
+                predicateList.add(person ->
+                        person.getAddress().toString().toLowerCase().contains(address.toLowerCase()))
+        );
+
+        argMultimap.getValue(PREFIX_PHONE).ifPresent(phone ->
+                predicateList.add(person -> person.getPhone().toString().toLowerCase().contains(phone.toLowerCase()))
+        );
+
+        argMultimap.getValue(PREFIX_TAG).ifPresent(tags ->
+                predicateList.add(person -> person.getTags().stream()
+                        .anyMatch(tag -> tag.toString().toLowerCase().contains(tags.toLowerCase()))
+                ));
+
+        argMultimap.getValue(PREFIX_FACEBOOK).ifPresent(fb ->
+                predicateList.add(person -> person.getFacebook().toString().toLowerCase().contains(fb.toLowerCase()))
+        );
+
+        argMultimap.getValue(PREFIX_INSTAGRAM).ifPresent(ig ->
+                predicateList.add(person -> person.getInstagram().toString().toLowerCase().contains(ig.toLowerCase()))
+        );
+
+        argMultimap.getValue(PREFIX_REMARK).ifPresent(remark ->
+                predicateList.add(person -> person.getRemark().toString().toLowerCase().contains(remark.toLowerCase()))
+        );
+
+        if (predicateList.isEmpty()) {
+            return false;
+        }
+
+        return predicateList.stream().allMatch(p -> p.test(customer));
     }
 
     @Override

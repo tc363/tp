@@ -32,9 +32,9 @@ public class FindCommandTest {
     @Test
     public void equals() {
         PersonContainsKeywordsPredicate firstPredicate =
-                new PersonContainsKeywordsPredicate("first");
+                new PersonContainsKeywordsPredicate("first", true);
         PersonContainsKeywordsPredicate secondPredicate =
-                new PersonContainsKeywordsPredicate("second");
+                new PersonContainsKeywordsPredicate("second", true);
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -59,7 +59,7 @@ public class FindCommandTest {
     @Test
     public void execute_noMatch_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("xyznonexistent");
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("xyznonexistent", true);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -69,7 +69,7 @@ public class FindCommandTest {
     @Test
     public void execute_phraseMatch_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("street");
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("street", true);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -78,7 +78,7 @@ public class FindCommandTest {
 
     @Test
     public void toStringMethod() {
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("keyword");
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate("keyword", true);
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
@@ -89,7 +89,7 @@ public class FindCommandTest {
         // Alice is in the name. Should find Alice.
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                "Alice", PersonContainsKeywordsPredicate.SearchType.NAME);
+                "find n/Alice", false);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
 
@@ -101,7 +101,7 @@ public class FindCommandTest {
     public void execute_specificPhoneMatch_personFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                "9876", PersonContainsKeywordsPredicate.SearchType.PHONE);
+                "find p/9876", false);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
 
@@ -113,7 +113,7 @@ public class FindCommandTest {
     public void execute_specificTagMatch_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                "friends", PersonContainsKeywordsPredicate.SearchType.TAG);
+                "find t/friends", false);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
 
@@ -125,7 +125,7 @@ public class FindCommandTest {
     public void execute_wrongSpecificField_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                "Alice", PersonContainsKeywordsPredicate.SearchType.ADDRESS);
+                "find p/Alice", false);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
 
