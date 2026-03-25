@@ -1,20 +1,11 @@
 package seedu.address.model.person;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_FACEBOOK;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_INSTAGRAM;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.parser.ArgumentMultimap;
-import seedu.address.logic.parser.ArgumentTokenizer;
 
 /**
  * Tests that a {@code Person}'s fields contain the given search phrase as a case-insensitive substring.
@@ -28,11 +19,14 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
     private final String searchPhrase;
     private final boolean isGeneralSearch;
+    private final Map<SearchType, String> specificKeywords;
 
     /** Constructor for General Search */
-    public PersonContainsKeywordsPredicate(String searchPhrase, boolean isGeneralSearch) {
+    public PersonContainsKeywordsPredicate(String searchPhrase, boolean isGeneralSearch,
+                                           Map<SearchType, String> specificKeywords) {
         this.searchPhrase = searchPhrase;
         this.isGeneralSearch = isGeneralSearch;
+        this.specificKeywords = specificKeywords;
     }
 
     @Override
@@ -60,41 +54,46 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     private boolean testSpecific(Person customer) {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                searchPhrase, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_FACEBOOK,
-                PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
-
+        if (specificKeywords.isEmpty()) {
+            return false;
+        }
         List<Predicate<Person>> predicateList = new ArrayList<>();
 
-        argMultimap.getValue(PREFIX_NAME).ifPresent(name ->
-                predicateList.add(person -> person.getName().fullName.toLowerCase().contains(name.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.NAME)) {
+            String val = specificKeywords.get(SearchType.NAME);
+            predicateList.add(p -> p.getName().fullName.toLowerCase().contains(val.toLowerCase()));
+        }
 
-        argMultimap.getValue(PREFIX_ADDRESS).ifPresent(address ->
-                predicateList.add(person ->
-                        person.getAddress().toString().toLowerCase().contains(address.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.ADDRESS)) {
+            String val = specificKeywords.get(SearchType.ADDRESS);
+            predicateList.add(p -> p.getAddress().map(address -> address.value.contains(val)).orElse(false));
+        }
 
-        argMultimap.getValue(PREFIX_PHONE).ifPresent(phone ->
-                predicateList.add(person -> person.getPhone().toString().toLowerCase().contains(phone.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.PHONE)) {
+            String val = specificKeywords.get(SearchType.PHONE);
+            predicateList.add(p -> p.getPhone().map(phone -> phone.value.contains(val)).orElse(false));
+        }
 
-        argMultimap.getValue(PREFIX_TAG).ifPresent(tags ->
-                predicateList.add(person -> person.getTags().stream()
-                        .anyMatch(tag -> tag.toString().toLowerCase().contains(tags.toLowerCase()))
-                ));
+        if (specificKeywords.containsKey(SearchType.TAG)) {
+            String val = specificKeywords.get(SearchType.TAG).toLowerCase();
+            predicateList.add(person -> person.getTags().stream()
+                    .anyMatch(tag -> tag.tagName.toLowerCase().contains(val)));
+        }
 
-        argMultimap.getValue(PREFIX_FACEBOOK).ifPresent(fb ->
-                predicateList.add(person -> person.getFacebook().toString().toLowerCase().contains(fb.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.FACEBOOK)) {
+            String val = specificKeywords.get(SearchType.FACEBOOK);
+            predicateList.add(p -> p.getFacebook().map(fb -> fb.value.contains(val)).orElse(false));
+        }
 
-        argMultimap.getValue(PREFIX_INSTAGRAM).ifPresent(ig ->
-                predicateList.add(person -> person.getInstagram().toString().toLowerCase().contains(ig.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.INSTAGRAM)) {
+            String val = specificKeywords.get(SearchType.INSTAGRAM);
+            predicateList.add(p -> p.getInstagram().map(ig -> ig.value.contains(val)).orElse(false));
+        }
 
-        argMultimap.getValue(PREFIX_REMARK).ifPresent(remark ->
-                predicateList.add(person -> person.getRemark().toString().toLowerCase().contains(remark.toLowerCase()))
-        );
+        if (specificKeywords.containsKey(SearchType.REMARK)) {
+            String val = specificKeywords.get(SearchType.REMARK);
+            predicateList.add(p -> p.getRemark().map(remark -> remark.value.contains(val)).orElse(false));
+        }
 
         if (predicateList.isEmpty()) {
             return false;

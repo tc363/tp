@@ -7,8 +7,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_CUSTOMER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ITEM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import seedu.address.logic.commands.FindOrderCommand;
