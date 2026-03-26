@@ -73,5 +73,6 @@ public class FindOrderCommandParserTest {
     public void parse_emptyPrefixValue_throwsParseException() {
         assertParseFailure(parser, " i/ ", "Item search value cannot be empty.");
         assertParseFailure(parser, " s/ ", "Status search value cannot be empty.");
+        assertParseFailure(parser, " a/ ", "Address search value cannot be empty.");
     }
 }
