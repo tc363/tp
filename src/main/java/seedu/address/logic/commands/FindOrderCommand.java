@@ -1,10 +1,11 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.order.Order;
@@ -70,6 +71,8 @@ public class FindOrderCommand extends Command {
         String resultMessage;
         if (foundCount == 0) {
             resultMessage = "No orders found.";
+        } else if (foundCount == 1) {
+            resultMessage = "1 order found.";
         } else {
             resultMessage = foundCount + " orders found.";
         }
