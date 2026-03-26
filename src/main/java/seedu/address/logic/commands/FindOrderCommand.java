@@ -3,6 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -40,33 +42,20 @@ public class FindOrderCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (predicate.getSearchType() == OrderContainsKeywordsPredicate.SearchType.CUSTOMER) {
-            String keyword = predicate.getKeyword();
-            String customerUuid;
+        Map<OrderContainsKeywordsPredicate.SearchType, String> resolveMap = new HashMap<>();
 
-            // Check if keyword is a UUID string (contains hyphens) or an index number
-            if (keyword.contains("-")) {
-                // It's already a UUID string
-                customerUuid = keyword;
+        for(Map.Entry<OrderContainsKeywordsPredicate.SearchType, String> entry : predicate.getSearchMap().entrySet()) {
+            OrderContainsKeywordsPredicate.SearchType searchType = entry.getKey();
+            String searchPhrase = entry.getValue();
+            if (searchType == OrderContainsKeywordsPredicate.SearchType.CUSTOMER) {
+                resolveMap.put(searchType, resolveCustomerUuid(model, searchPhrase));
             } else {
-                // It's an index number, convert to UUID
-                int oneBased = Integer.parseInt(keyword);
-                int zeroBased = oneBased - 1;
-
-                if (zeroBased < 0 || zeroBased >= model.getFilteredPersonList().size()) {
-                    throw new CommandException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-                }
-
-                customerUuid = model.getFilteredPersonList().get(zeroBased).getId().toString();
+                resolveMap.put(searchType, searchPhrase);
             }
-
-            model.updateFilteredOrderList(
-                    new OrderContainsKeywordsPredicate(OrderContainsKeywordsPredicate.SearchType.CUSTOMER, customerUuid)
-            );
-        } else {
-            model.updateFilteredOrderList(predicate);
         }
-
+        OrderContainsKeywordsPredicate resolvedPredicate =
+                new OrderContainsKeywordsPredicate(resolveMap);
+        model.updateFilteredOrderList(resolvedPredicate);
         String resultMessage = "=== FIND ORDERS ===\n";
         if (model.getFilteredOrderList().isEmpty()) {
             resultMessage += "No orders found.";
@@ -74,6 +63,24 @@ public class FindOrderCommand extends Command {
             resultMessage += model.getFilteredOrderList().toString();
         }
         return new CommandResult(resultMessage);
+    }
+
+    private String resolveCustomerUuid(Model model, String keyword) throws CommandException {
+        if (keyword.contains("-")) {
+            // It's already a UUID string
+            return keyword;
+        } else{
+            // It's an index number, convert to UUID
+            int oneBased = Integer.parseInt(keyword);
+            int zeroBased = oneBased - 1;
+
+            if (zeroBased < 0 || zeroBased >= model.getFilteredPersonList().size()) {
+                throw new CommandException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
+
+            return model.getFilteredPersonList().get(zeroBased).getId().toString();
+        }
+
     }
 
     @Override
