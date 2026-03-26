@@ -38,13 +38,13 @@ public class OrderCard extends UiPart<Region> {
             status.setStyle("-fx-background-color: #dce5f6; -fx-text-fill: #083fa7;"); // Lemon chiffon
             break;
         case "READY":
-            status.setStyle("-fx-background-color: #f0f4c5; -fx-text-fill: #949e06;"); // Light green
+            status.setStyle("-fx-background-color: #f0f4c5; -fx-text-fill: #7b8405;"); // Light green
             break;
         case "DELIVERED":
-            status.setStyle("-fx-background-color: #c9f8c9; -fx-text-fill: #0bcb0b;"); // Pale green
+            status.setStyle("-fx-background-color: #c9f8c9; -fx-text-fill: #067606;"); // Pale green
             break;
         case "CANCELLED":
-            status.setStyle("-fx-background-color: #f9cfd5; -fx-text-fill: #c20925;"); // Light pink
+            status.setStyle("-fx-background-color: #f9cfd5; -fx-text-fill: #9d081f;"); // Light pink
             break;
         default:
             status.setStyle("-fx-background-color: #cfcece; -fx-text-fill: black;");
