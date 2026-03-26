@@ -1,6 +1,7 @@
 package seedu.address.model.order;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,9 +56,27 @@ public class OrderList {
     }
 
     /**
+     * Replaces the given order {@code target} in the list with {@code editedOrder}.
+     * {@code target} must exist in the list.
+     * The order identity of {@code editedOrder} must not be the same as another existing order in the list.
+     */
+    public void setOrder(Order target, Order editedOrder) {
+        requireAllNonNull(target, editedOrder);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new OrderNotFoundException();
+        }
+
+        internalList.set(index, editedOrder);
+    }
+
+    /**
      * Replaces the contents of this list with {@code orders}.
      */
     public void setOrders(List<Order> orders) {
+        requireNonNull(orders);
+        assert !orders.contains(null) : "Order list should not contain null elements";
         internalList.setAll(orders);
     }
 
@@ -85,6 +104,7 @@ public class OrderList {
     }
 
     public Order get(int index) {
+        assert index >= 0 && index < internalList.size() : "Index out of bounds";
         return internalList.get(index);
     }
 

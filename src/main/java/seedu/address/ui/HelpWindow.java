@@ -103,6 +103,12 @@ public class HelpWindow extends UiPart<Stage> {
                 "find-o Category-Type/Category-Keywords",
                 "find-o i/pizza");
 
+        addCommandBlock("edit-o", "Edits the details of the order identified "
+                + "by the index number used in the displayed order list. "
+                + "Existing values will be overwritten by the input values.",
+                "edit-o ORDER_INDEX [i/ITEM_NAME] [q/QUANTITY] [at/DATE] [a/DELIVERY_ADDRESS] [s/STATUS]",
+                "edit-o 1 i/Pizza q/3 at/2026-04-02 1200");
+
         addCommandBlock("list-o", "Shows a list of all orders in the address book.",
                 "list-o",
                 "list-o");

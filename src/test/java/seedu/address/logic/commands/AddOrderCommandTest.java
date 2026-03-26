@@ -255,6 +255,11 @@ public class AddOrderCommandTest {
         }
 
         @Override
+        public void setOrder(Order target, Order editedOrder) {
+            throw new AssertionError();
+        }
+
+        @Override
         public void deleteOrder(Order order) {
             throw new AssertionError();
         }

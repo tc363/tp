@@ -98,6 +98,12 @@ public interface Model {
     void addOrder(Order order);
 
     /**
+     * Replaces the given order {@code target} in the address book with {@code editedOrder}.
+     * {@code target} must exist in the address book.
+     */
+    void setOrder(Order target, Order editedOrder);
+
+    /**
      * Deletes the given order from the address book.
      * The order must exist in the address book.
      */
