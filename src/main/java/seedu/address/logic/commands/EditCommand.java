@@ -85,6 +85,10 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
+        if (!hasAtLeastOneContactMethod(editedPerson)) {
+            throw new CommandException(Messages.MESSAGE_MISSING_CONTACT_METHOD);
+        }
+
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
@@ -102,19 +106,37 @@ public class EditCommand extends Command {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = getUpdatedField(editPersonDescriptor.getPhone(), personToEdit.getPhone());
-        Facebook updatedFacebook = getUpdatedField(editPersonDescriptor.getFacebook(), personToEdit.getFacebook());
-        Instagram updatedInstagram = getUpdatedField(editPersonDescriptor.getInstagram(), personToEdit.getInstagram());
-        Address updatedAddress = getUpdatedField(editPersonDescriptor.getAddress(), personToEdit.getAddress());
-        Remark updatedRemark = getUpdatedField(editPersonDescriptor.getRemark(), personToEdit.getRemark());
+        Phone updatedPhone = resolveEditableOptionalField(editPersonDescriptor.phoneUpdate, personToEdit.getPhone());
+        Facebook updatedFacebook = resolveEditableOptionalField(editPersonDescriptor.facebookUpdate,
+                personToEdit.getFacebook());
+        Instagram updatedInstagram = resolveEditableOptionalField(editPersonDescriptor.instagramUpdate,
+                personToEdit.getInstagram());
+        Address updatedAddress = resolveEditableOptionalField(editPersonDescriptor.addressUpdate,
+                personToEdit.getAddress());
+        Remark updatedRemark = resolveEditableOptionalField(editPersonDescriptor.remarkUpdate,
+                personToEdit.getRemark());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedFacebook, updatedInstagram, updatedAddress,
                 updatedRemark, updatedTags);
     }
 
-    private static <T> T getUpdatedField(Optional<T> descriptorField, Optional<T> originalField) {
-        return descriptorField.orElse(originalField.orElse(null));
+    /**
+     * Resolves an optional field that supports explicit clearing in edit.
+     * If the field is edited, returns the descriptor value (which may be empty and thus resolves to null).
+     * If the field is not edited, falls back to the original value.
+     */
+    private static <T> T resolveEditableOptionalField(EditPersonDescriptor.FieldUpdate<T> fieldUpdate,
+                                                      Optional<T> originalField) {
+        return fieldUpdate.resolveAgainst(originalField.orElse(null));
+    }
+
+    /** Returns true if the person has at least one contact method. */
+    private static boolean hasAtLeastOneContactMethod(Person person) {
+        return person.getPhone().isPresent()
+                || person.getFacebook().isPresent()
+                || person.getInstagram().isPresent()
+                || person.getAddress().isPresent();
     }
 
     @Override
@@ -146,12 +168,75 @@ public class EditCommand extends Command {
      * corresponding field value of the person.
      */
     public static class EditPersonDescriptor {
+        private static final class FieldUpdate<T> {
+            private enum State { UNCHANGED, CLEAR, SET }
+
+            private final State state;
+            private final T value;
+
+            private FieldUpdate(State state, T value) {
+                this.state = state;
+                this.value = value;
+            }
+
+            static <T> FieldUpdate<T> unchanged() {
+                return new FieldUpdate<>(State.UNCHANGED, null);
+            }
+
+            static <T> FieldUpdate<T> clear() {
+                return new FieldUpdate<>(State.CLEAR, null);
+            }
+
+            static <T> FieldUpdate<T> set(T value) {
+                // Preserve existing behavior where set(null) is treated as an explicit clear
+                return value == null ? clear() : new FieldUpdate<>(State.SET, value);
+            }
+
+            boolean isEdited() {
+                return state != State.UNCHANGED;
+            }
+
+            Optional<T> getEditedValue() {
+                return state == State.SET ? Optional.of(value) : Optional.empty();
+            }
+
+            T resolveAgainst(T originalValue) {
+                switch (state) {
+                case UNCHANGED:
+                    return originalValue;
+                case CLEAR:
+                    return null;
+                case SET:
+                    return value;
+                default:
+                    throw new IllegalStateException("Unknown field update state: " + state);
+                }
+            }
+
+            @Override
+            public boolean equals(Object other) {
+                if (other == this) {
+                    return true;
+                }
+                if (!(other instanceof FieldUpdate<?>)) {
+                    return false;
+                }
+                FieldUpdate<?> otherFieldUpdate = (FieldUpdate<?>) other;
+                return state == otherFieldUpdate.state && Objects.equals(value, otherFieldUpdate.value);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(state, value);
+            }
+        }
+
         private Name name;
-        private Phone phone;
-        private Facebook facebook;
-        private Instagram instagram;
-        private Address address;
-        private Remark remark;
+        private FieldUpdate<Phone> phoneUpdate = FieldUpdate.unchanged();
+        private FieldUpdate<Facebook> facebookUpdate = FieldUpdate.unchanged();
+        private FieldUpdate<Instagram> instagramUpdate = FieldUpdate.unchanged();
+        private FieldUpdate<Address> addressUpdate = FieldUpdate.unchanged();
+        private FieldUpdate<Remark> remarkUpdate = FieldUpdate.unchanged();
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -161,12 +246,12 @@ public class EditCommand extends Command {
          * A defensive copy of {@code tags} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
-            setName(toCopy.name);
-            setPhone(toCopy.phone);
-            setFacebook(toCopy.facebook);
-            setInstagram(toCopy.instagram);
-            setAddress(toCopy.address);
-            setRemark(toCopy.remark);
+            name = toCopy.name;
+            phoneUpdate = toCopy.phoneUpdate;
+            facebookUpdate = toCopy.facebookUpdate;
+            instagramUpdate = toCopy.instagramUpdate;
+            addressUpdate = toCopy.addressUpdate;
+            remarkUpdate = toCopy.remarkUpdate;
             setTags(toCopy.tags);
         }
 
@@ -174,7 +259,12 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, facebook, instagram, address, tags);
+            return CollectionUtil.isAnyNonNull(name, tags)
+                    || phoneUpdate.isEdited()
+                    || facebookUpdate.isEdited()
+                    || instagramUpdate.isEdited()
+                    || addressUpdate.isEdited()
+                    || remarkUpdate.isEdited();
         }
 
         public void setName(Name name) {
@@ -186,43 +276,88 @@ public class EditCommand extends Command {
         }
 
         public void setPhone(Phone phone) {
-            this.phone = phone;
+            this.phoneUpdate = FieldUpdate.set(phone);
+        }
+
+        /** Marks phone as edited and clears it. */
+        public void clearPhone() {
+            this.phoneUpdate = FieldUpdate.clear();
         }
 
         public Optional<Phone> getPhone() {
-            return Optional.ofNullable(phone);
+            return phoneUpdate.getEditedValue();
+        }
+
+        public boolean isPhoneEdited() {
+            return phoneUpdate.isEdited();
         }
 
         public void setFacebook(Facebook facebook) {
-            this.facebook = facebook;
+            this.facebookUpdate = FieldUpdate.set(facebook);
+        }
+
+        /** Marks Facebook as edited and clears it. */
+        public void clearFacebook() {
+            this.facebookUpdate = FieldUpdate.clear();
         }
 
         public Optional<Facebook> getFacebook() {
-            return Optional.ofNullable(facebook);
+            return facebookUpdate.getEditedValue();
+        }
+
+        public boolean isFacebookEdited() {
+            return facebookUpdate.isEdited();
         }
 
         public void setInstagram(Instagram instagram) {
-            this.instagram = instagram;
+            this.instagramUpdate = FieldUpdate.set(instagram);
+        }
+
+        /** Marks Instagram as edited and clears it. */
+        public void clearInstagram() {
+            this.instagramUpdate = FieldUpdate.clear();
         }
 
         public Optional<Instagram> getInstagram() {
-            return Optional.ofNullable(instagram);
+            return instagramUpdate.getEditedValue();
+        }
+
+        public boolean isInstagramEdited() {
+            return instagramUpdate.isEdited();
         }
 
         public void setAddress(Address address) {
-            this.address = address;
+            this.addressUpdate = FieldUpdate.set(address);
+        }
+
+        /** Marks address as edited and clears it. */
+        public void clearAddress() {
+            this.addressUpdate = FieldUpdate.clear();
         }
 
         public Optional<Address> getAddress() {
-            return Optional.ofNullable(address);
+            return addressUpdate.getEditedValue();
+        }
+
+        public boolean isAddressEdited() {
+            return addressUpdate.isEdited();
         }
 
         public void setRemark(Remark remark) {
-            this.remark = remark;
+            this.remarkUpdate = FieldUpdate.set(remark);
+        }
+
+        /** Marks remark as edited and clears it. */
+        public void clearRemark() {
+            this.remarkUpdate = FieldUpdate.clear();
         }
 
         public Optional<Remark> getRemark() {
-            return Optional.ofNullable(remark);
+            return remarkUpdate.getEditedValue();
+        }
+
+        public boolean isRemarkEdited() {
+            return remarkUpdate.isEdited();
         }
 
         /**
@@ -255,11 +390,11 @@ public class EditCommand extends Command {
 
             EditPersonDescriptor otherEditPersonDescriptor = (EditPersonDescriptor) other;
             return Objects.equals(name, otherEditPersonDescriptor.name)
-                    && Objects.equals(phone, otherEditPersonDescriptor.phone)
-                    && Objects.equals(facebook, otherEditPersonDescriptor.facebook)
-                    && Objects.equals(instagram, otherEditPersonDescriptor.instagram)
-                    && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(remark, otherEditPersonDescriptor.remark)
+                    && Objects.equals(phoneUpdate, otherEditPersonDescriptor.phoneUpdate)
+                    && Objects.equals(facebookUpdate, otherEditPersonDescriptor.facebookUpdate)
+                    && Objects.equals(instagramUpdate, otherEditPersonDescriptor.instagramUpdate)
+                    && Objects.equals(addressUpdate, otherEditPersonDescriptor.addressUpdate)
+                    && Objects.equals(remarkUpdate, otherEditPersonDescriptor.remarkUpdate)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
@@ -267,11 +402,16 @@ public class EditCommand extends Command {
         public String toString() {
             return new ToStringBuilder(this)
                     .add("name", name)
-                    .add("phone", phone)
-                    .add("facebook", facebook)
-                    .add("instagram", instagram)
-                    .add("address", address)
-                    .add("remark", remark)
+                    .add("phone", getPhone().orElse(null))
+                    .add("isPhoneEdited", isPhoneEdited())
+                    .add("facebook", getFacebook().orElse(null))
+                    .add("isFacebookEdited", isFacebookEdited())
+                    .add("instagram", getInstagram().orElse(null))
+                    .add("isInstagramEdited", isInstagramEdited())
+                    .add("address", getAddress().orElse(null))
+                    .add("isAddressEdited", isAddressEdited())
+                    .add("remark", getRemark().orElse(null))
+                    .add("isRemarkEdited", isRemarkEdited())
                     .add("tags", tags)
                     .toString();
         }
