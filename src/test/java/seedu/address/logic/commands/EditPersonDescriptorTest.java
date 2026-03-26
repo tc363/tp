@@ -7,8 +7,10 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_FACEBOOK_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_INSTAGRAM_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
 import org.junit.jupiter.api.Test;
@@ -44,12 +46,25 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withPhone(VALID_PHONE_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
+        // phone explicitly cleared vs not edited -> returns false
+        EditPersonDescriptor emptyDescriptor = new EditPersonDescriptorBuilder().build();
+        EditPersonDescriptor clearedPhoneDescriptor = new EditPersonDescriptorBuilder().clearPhone().build();
+        assertFalse(emptyDescriptor.equals(clearedPhoneDescriptor));
+
         // different facebook username -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withFacebook(VALID_FACEBOOK_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
+        // different instagram username -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withInstagram(VALID_INSTAGRAM_BOB).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
         // different address -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withAddress(VALID_ADDRESS_BOB).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
+        // different remark -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withRemark(VALID_REMARK_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different tags -> returns false
@@ -62,11 +77,16 @@ public class EditPersonDescriptorTest {
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
-                + editPersonDescriptor.getPhone().orElse(null) + ", facebook="
-                + editPersonDescriptor.getFacebook().orElse(null) + ", instagram="
-                + editPersonDescriptor.getInstagram().orElse(null) + ", address="
-                + editPersonDescriptor.getAddress().orElse(null) + ", remark="
-                + editPersonDescriptor.getRemark().orElse(null) + ", tags="
+                + editPersonDescriptor.getPhone().orElse(null) + ", isPhoneEdited="
+                + editPersonDescriptor.isPhoneEdited() + ", facebook="
+                + editPersonDescriptor.getFacebook().orElse(null) + ", isFacebookEdited="
+                + editPersonDescriptor.isFacebookEdited() + ", instagram="
+                + editPersonDescriptor.getInstagram().orElse(null) + ", isInstagramEdited="
+                + editPersonDescriptor.isInstagramEdited() + ", address="
+                + editPersonDescriptor.getAddress().orElse(null) + ", isAddressEdited="
+                + editPersonDescriptor.isAddressEdited() + ", remark="
+                + editPersonDescriptor.getRemark().orElse(null) + ", isRemarkEdited="
+                + editPersonDescriptor.isRemarkEdited() + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }

@@ -11,6 +11,7 @@ import seedu.address.model.person.Instagram;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -34,10 +35,11 @@ public class EditPersonDescriptorBuilder {
     public EditPersonDescriptorBuilder(Person person) {
         descriptor = new EditPersonDescriptor();
         descriptor.setName(person.getName());
-        descriptor.setPhone(person.getPhone().orElse(null));
-        descriptor.setFacebook(person.getFacebook().orElse(null));
-        descriptor.setInstagram(person.getInstagram().orElse(null));
-        descriptor.setAddress(person.getAddress().orElse(null));
+        person.getPhone().ifPresent(descriptor::setPhone);
+        person.getFacebook().ifPresent(descriptor::setFacebook);
+        person.getInstagram().ifPresent(descriptor::setInstagram);
+        person.getAddress().ifPresent(descriptor::setAddress);
+        person.getRemark().ifPresent(descriptor::setRemark);
         descriptor.setTags(person.getTags());
     }
 
@@ -57,11 +59,23 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
+    /** Clears the {@code Phone} in the {@code EditPersonDescriptor} that we are building. */
+    public EditPersonDescriptorBuilder clearPhone() {
+        descriptor.clearPhone();
+        return this;
+    }
+
     /**
      * Sets the {@code Facebook} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withFacebook(String facebook) {
         descriptor.setFacebook(new Facebook(facebook));
+        return this;
+    }
+
+    /** Clears the {@code Facebook} in the {@code EditPersonDescriptor} that we are building. */
+    public EditPersonDescriptorBuilder clearFacebook() {
+        descriptor.clearFacebook();
         return this;
     }
 
@@ -73,11 +87,37 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
+    /** Clears the {@code Instagram} in the {@code EditPersonDescriptor} that we are building. */
+    public EditPersonDescriptorBuilder clearInstagram() {
+        descriptor.clearInstagram();
+        return this;
+    }
+
     /**
      * Sets the {@code Address} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withAddress(String address) {
         descriptor.setAddress(new Address(address));
+        return this;
+    }
+
+    /** Clears the {@code Address} in the {@code EditPersonDescriptor} that we are building. */
+    public EditPersonDescriptorBuilder clearAddress() {
+        descriptor.clearAddress();
+        return this;
+    }
+
+    /**
+     * Sets the {@code Remark} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withRemark(String remark) {
+        descriptor.setRemark(new Remark(remark));
+        return this;
+    }
+
+    /** Clears the {@code Remark} in the {@code EditPersonDescriptor} that we are building. */
+    public EditPersonDescriptorBuilder clearRemark() {
+        descriptor.clearRemark();
         return this;
     }
 

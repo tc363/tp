@@ -66,15 +66,16 @@ public class PersonUtil {
     public static String getEditPersonDescriptorDetails(EditPersonDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
-        descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
-        descriptor.getFacebook()
-                .ifPresent(facebook -> sb.append(PREFIX_FACEBOOK).append(facebook.value).append(" "));
-        descriptor.getInstagram()
-                .ifPresent(instagram -> sb.append(PREFIX_INSTAGRAM).append(instagram.value).append(" "));
-        descriptor.getAddress()
-                .ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
-        descriptor.getRemark()
-                .ifPresent(remark -> sb.append(PREFIX_REMARK).append(remark.value).append(" "));
+        appendOptionalEditField(sb, PREFIX_PHONE.toString(), descriptor.isPhoneEdited(),
+                descriptor.getPhone().map(phone -> phone.value).orElse(null));
+        appendOptionalEditField(sb, PREFIX_FACEBOOK.toString(), descriptor.isFacebookEdited(),
+                descriptor.getFacebook().map(facebook -> facebook.value).orElse(null));
+        appendOptionalEditField(sb, PREFIX_INSTAGRAM.toString(), descriptor.isInstagramEdited(),
+                descriptor.getInstagram().map(instagram -> instagram.value).orElse(null));
+        appendOptionalEditField(sb, PREFIX_ADDRESS.toString(), descriptor.isAddressEdited(),
+                descriptor.getAddress().map(address -> address.value).orElse(null));
+        appendOptionalEditField(sb, PREFIX_REMARK.toString(), descriptor.isRemarkEdited(),
+                descriptor.getRemark().map(remark -> remark.value).orElse(null));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {
@@ -84,5 +85,17 @@ public class PersonUtil {
             }
         }
         return sb.toString();
+    }
+
+    /** Appends either a set value (prefix+value) or a clear marker (bare prefix) for edited optional fields. */
+    private static void appendOptionalEditField(StringBuilder sb, String prefix, boolean isEdited, String value) {
+        if (!isEdited) {
+            return;
+        }
+        sb.append(prefix);
+        if (value != null) {
+            sb.append(value);
+        }
+        sb.append(" ");
     }
 }
