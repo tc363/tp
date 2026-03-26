@@ -42,10 +42,14 @@ public class FindCommand extends Command {
         requireNonNull(model, "Model cannot be null");
         assert predicate != null : "Predicate must be non-null after construction";
         model.updateFilteredPersonList(predicate);
-        int resultCount = model.getFilteredPersonList().size();
-        assert resultCount >= 0 : "Filtered list size cannot be negative";
-        logger.fine(String.format("Find command applied: %d person(s) in filtered list", resultCount));
-        return new CommandResult(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount));
+        int listSize = model.getFilteredPersonList().size();
+        assert listSize >= 0 : "Filtered list size cannot be negative";
+        String resultMessage = String.format(
+                Messages.MESSAGE_PERSONS_LISTED_OVERVIEW,
+                listSize,
+                predicate.getSummary()
+        );
+        return new CommandResult(resultMessage);
     }
 
     @Override

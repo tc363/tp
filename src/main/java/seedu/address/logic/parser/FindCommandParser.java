@@ -10,7 +10,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Map;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -37,68 +38,47 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 args, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_FACEBOOK,
                 PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
-        boolean hasPrefix = argMultimap.containsPrefix(PREFIX_NAME, PREFIX_PHONE,
-                PREFIX_ADDRESS, PREFIX_FACEBOOK, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
-        if (!hasPrefix) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(trimmedArgs));
-        }
-
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE,
-                PREFIX_ADDRESS, PREFIX_FACEBOOK, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
-
-        long prefixCount = Stream.of(PREFIX_NAME, PREFIX_PHONE, PREFIX_FACEBOOK,
-                        PREFIX_ADDRESS, PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK)
-                .filter(prefix -> argMultimap.getValue(prefix).isPresent())
-                .count();
-
-        if (prefixCount > 1) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    "Please only provide one prefix at a time.\n" + FindCommand.MESSAGE_USAGE));
-        }
-        assert prefixCount == 1 : "Prefixed find must have exactly one active prefix";
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_FACEBOOK,
+                PREFIX_TAG, PREFIX_INSTAGRAM, PREFIX_REMARK);
+        Map<PersonContainsKeywordsPredicate.SearchType, String> keywordsMap = new HashMap<>();
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_NAME),
-                    PersonContainsKeywordsPredicate.SearchType.NAME));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.NAME,
+                    getNonEmptyValue(argMultimap, PREFIX_NAME));
         }
 
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_PHONE),
-                    PersonContainsKeywordsPredicate.SearchType.PHONE));
-        }
-
-        if (argMultimap.getValue(PREFIX_FACEBOOK).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_FACEBOOK),
-                    PersonContainsKeywordsPredicate.SearchType.FACEBOOK));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.PHONE,
+                    getNonEmptyValue(argMultimap, PREFIX_PHONE));
         }
 
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_ADDRESS),
-                    PersonContainsKeywordsPredicate.SearchType.ADDRESS));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.ADDRESS,
+                    getNonEmptyValue(argMultimap, PREFIX_ADDRESS));
+        }
+
+        if (argMultimap.getValue(PREFIX_FACEBOOK).isPresent()) {
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.FACEBOOK,
+                    getNonEmptyValue(argMultimap, PREFIX_FACEBOOK));
         }
 
         if (argMultimap.getValue(PREFIX_TAG).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_TAG),
-                    PersonContainsKeywordsPredicate.SearchType.TAG));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.TAG,
+                    getNonEmptyValue(argMultimap, PREFIX_TAG));
         }
 
         if (argMultimap.getValue(PREFIX_INSTAGRAM).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_INSTAGRAM),
-                    PersonContainsKeywordsPredicate.SearchType.INSTAGRAM));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.INSTAGRAM,
+                    getNonEmptyValue(argMultimap, PREFIX_INSTAGRAM));
         }
 
         if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
-            return new FindCommand(new PersonContainsKeywordsPredicate(
-                    getNonEmptyValue(argMultimap, PREFIX_REMARK),
-                    PersonContainsKeywordsPredicate.SearchType.REMARK));
+            keywordsMap.put(PersonContainsKeywordsPredicate.SearchType.REMARK,
+                    getNonEmptyValue(argMultimap, PREFIX_REMARK));
         }
-        throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        if (keywordsMap.isEmpty()) {
+            return new FindCommand(new PersonContainsKeywordsPredicate(trimmedArgs, true, keywordsMap));
+        }
+        return new FindCommand(new PersonContainsKeywordsPredicate(trimmedArgs, false, keywordsMap));
     }
 
     /**

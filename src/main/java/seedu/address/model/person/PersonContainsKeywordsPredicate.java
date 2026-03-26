@@ -2,7 +2,9 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -19,23 +21,18 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
     private final String searchPhrase;
     private final boolean isGeneralSearch;
-    private final SearchType searchType;
+    private final Map<SearchType, String> specificKeywords;
 
     /** Constructor for General Search */
-    public PersonContainsKeywordsPredicate(String searchPhrase) {
-        requireNonNull(searchPhrase, "Search phrase cannot be null");
-        this.searchPhrase = searchPhrase;
-        this.isGeneralSearch = true;
-        this.searchType = null;
-    }
+    public PersonContainsKeywordsPredicate(String searchPhrase, boolean isGeneralSearch,
+                                           Map<SearchType, String> specificKeywords) {
 
-    /** Constructor for Specific Search */
-    public PersonContainsKeywordsPredicate(String searchPhrase, SearchType searchType) {
-        requireNonNull(searchPhrase, "Search phrase cannot be null");
-        requireNonNull(searchType, "Search type cannot be null for field-specific search");
+        requireNonNull(searchPhrase);
+        requireNonNull(specificKeywords);
+
         this.searchPhrase = searchPhrase;
-        this.isGeneralSearch = false;
-        this.searchType = searchType;
+        this.isGeneralSearch = isGeneralSearch;
+        this.specificKeywords = specificKeywords;
     }
 
     @Override
@@ -44,7 +41,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         if (isGeneralSearch) {
             return testGeneral(person);
         }
-        assert searchType != null : "Specific search must have a non-null search type";
         return testSpecific(person);
     }
 
@@ -65,42 +61,63 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(tag -> tag.tagName.toLowerCase().contains(lowerPhrase));
     }
 
-    private boolean testSpecific(Person person) {
-        assert person != null : "Person must be non-null for search";
-        assert searchType != null : "Field-specific search requires a search type";
-        if (searchPhrase.isEmpty()) {
+    private boolean testSpecific(Person customer) {
+        assert customer != null : "Person must be non-null for search";
+        List<Predicate<Person>> predicateList = new ArrayList<>();
+
+        if (specificKeywords.containsKey(SearchType.NAME)) {
+            String val = specificKeywords.get(SearchType.NAME);
+            predicateList.add(p -> p.getName().fullName.toLowerCase().contains(val.toLowerCase()));
+        }
+
+        if (specificKeywords.containsKey(SearchType.ADDRESS)) {
+            String val = specificKeywords.get(SearchType.ADDRESS);
+            predicateList.add(p -> p.getAddress().map(address -> address.value.contains(val)).orElse(false));
+        }
+
+        if (specificKeywords.containsKey(SearchType.PHONE)) {
+            String val = specificKeywords.get(SearchType.PHONE);
+            predicateList.add(p -> p.getPhone().map(phone -> phone.value.contains(val)).orElse(false));
+        }
+
+        if (specificKeywords.containsKey(SearchType.TAG)) {
+            String val = specificKeywords.get(SearchType.TAG).toLowerCase();
+            predicateList.add(person -> person.getTags().stream()
+                    .anyMatch(tag -> tag.tagName.toLowerCase().contains(val)));
+        }
+
+        if (specificKeywords.containsKey(SearchType.FACEBOOK)) {
+            String val = specificKeywords.get(SearchType.FACEBOOK);
+            predicateList.add(p -> p.getFacebook().map(fb -> fb.value.contains(val)).orElse(false));
+        }
+
+        if (specificKeywords.containsKey(SearchType.INSTAGRAM)) {
+            String val = specificKeywords.get(SearchType.INSTAGRAM);
+            predicateList.add(p -> p.getInstagram().map(ig -> ig.value.contains(val)).orElse(false));
+        }
+
+        if (specificKeywords.containsKey(SearchType.REMARK)) {
+            String val = specificKeywords.get(SearchType.REMARK);
+            predicateList.add(p -> p.getRemark().map(remark -> remark.value.contains(val)).orElse(false));
+        }
+
+        if (predicateList.isEmpty()) {
             return false;
         }
-        String lowerPhrase = searchPhrase.toLowerCase();
-        switch (searchType) {
-        case NAME:
-            return person.getName().toString().toLowerCase().contains(lowerPhrase);
-        case ADDRESS:
-            return person.getAddress()
-                    .map(address -> address.toString().toLowerCase().contains(lowerPhrase))
-                    .orElse(false);
-        case PHONE:
-            return person.getPhone()
-                .map(phone -> phone.toString().toLowerCase().contains(lowerPhrase))
-                .orElse(false);
-        case FACEBOOK:
-            return person.getFacebook()
-                    .map(facebook -> facebook.toString().toLowerCase().contains(lowerPhrase))
-                    .orElse(false);
-        case TAG:
-            return person.getTags().stream()
-                    .anyMatch(tag -> tag.toString().toLowerCase().contains(lowerPhrase));
-        case INSTAGRAM:
-            return person.getInstagram()
-                    .map(ig -> ig.toString().toLowerCase().contains(lowerPhrase))
-                    .orElse(false);
-        case REMARK:
-            return person.getRemark()
-                    .map(remark -> remark.toString().toLowerCase().contains(lowerPhrase))
-                    .orElse(false);
-        default:
-            throw new AssertionError("Unhandled search type: " + searchType);
+
+        return predicateList.stream().allMatch(p -> p.test(customer));
+    }
+
+    public String getSummary() {
+        if (isGeneralSearch) {
+            return "Keyword: " + searchPhrase.trim();
         }
+
+        return specificKeywords.entrySet().stream()
+                .map(entry -> entry.getKey().toString() + ": " + entry.getValue())
+                .reduce((s1, s2) -> s1 + ", " + s2)
+                .map(s -> "Keyword: [" + s + "]")
+                .orElse("All");
     }
 
     @Override
@@ -115,22 +132,15 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
-        return searchPhrase.equals(otherPredicate.searchPhrase)
-                && isGeneralSearch == otherPredicate.isGeneralSearch
-                && Objects.equals(searchType, otherPredicate.searchType);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(searchPhrase, isGeneralSearch, searchType);
+        return isGeneralSearch == otherPredicate.isGeneralSearch
+                && searchPhrase.equals(otherPredicate.searchPhrase)
+                && specificKeywords.equals(otherPredicate.specificKeywords);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("searchPhrase", searchPhrase)
-                .add("generalSearch", isGeneralSearch)
-                .add("searchType", searchType)
-                .toString();
+        return new ToStringBuilder(this).add("searchPhrase", searchPhrase)
+                .add("isGeneralSearch", isGeneralSearch)
+                .add("specificKeywords", specificKeywords).toString();
     }
 }

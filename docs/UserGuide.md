@@ -221,7 +221,7 @@ Format: `find PREFIX/KEYWORD`
 
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Limits the search to a single specified field.
-* Only one prefix can be used per command.
+* Allows searching with multiple prefixes.
 
 Available Prefixes:
 * `n/NAME`
@@ -235,6 +235,7 @@ Available Prefixes:
 Examples:
 * `find n/Alice` returns all customers whose name contains `Alice`.
 * `find t/regular` returns all customers whose tags contain `regular`.
+* `find n/Bob r/non-spicy` returns all customers whose name contains `Bob` and whose remark contains `non-spicy`.
 
 </div>
 
@@ -297,7 +298,7 @@ If the customer has no stored address, you will be prompted to enter a delivery 
 
 ### <a id="find-o"></a>Finding orders : `find-o`
 
-Search for different orders with 3 category options: item name, delivery address, customer id
+Search for different orders with 4 category options: item name, delivery address, customer id, status
 
 Format: `find-o Category-Type/Category-Keywords`
 
