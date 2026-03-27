@@ -27,6 +27,8 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 ## **Design**
 
+<div class="section-spacing">
+
 ### Architecture
 
 <puml src="diagrams/ArchitectureDiagram.puml" width="280" />
@@ -67,6 +69,10 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+</div>
+
+<div class="section-spacing">
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -83,6 +89,10 @@ The `UI` component,
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+
+</div>
+
+<div class="section-spacing">
 
 ### Logic component
 
@@ -117,6 +127,10 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+</div>
+
+<div class="section-spacing">
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -138,6 +152,9 @@ The `Model` component,
 
 </box>
 
+</div>
+
+<div class="section-spacing">
 
 ### Storage component
 
@@ -150,6 +167,8 @@ The `Storage` component,
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+</div>
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -159,6 +178,8 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+<div class="section-spacing">
 
 ### \[Proposed\] Undo/redo feature
 
@@ -253,6 +274,8 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
+</div>
+
 ### \[Proposed\] Data archiving
 
 _{Explain here how the data archiving feature will be implemented}_
@@ -272,6 +295,8 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ## **Appendix: Requirements**
 
+<div class="section-spacing">
+
 ### Product scope
 
 **Target user profile**:
@@ -285,6 +310,9 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Value proposition**: Manage customer profiles and track food orders significantly faster than a typical mouse/GUI-driven app.
 
+</div>
+
+<div class="section-spacing">
 
 ### User stories
 
@@ -309,9 +337,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | User                         | Upload a profile picture for a customer contact                                                        | Visually verify a customer's identity during order handovers and reduce the risk of record-entry errors for customers with similar names |
 | `*`      | User                         | Store contact details of ingredient suppliers separately                                               | Maintain a clear separation between my customers and my ingredient providers                                                             |
 
+</div>
+
+<div class="section-spacing">
+
 ### Use cases
 
-(For all use cases below, the **System** is the `BZNUS` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `BZNUS` and the **Actor** is the `user`, unless specified otherwise)
 
 **Use case: UC01 - Add Customer**
 
@@ -439,9 +471,7 @@ Use case ends.
 
 ---
 
-**System**: BZNUS\
-**Use case**: UC06 - Add order\
-**Actor**: User\
+**Use case: UC06 - Add order**\
 **Guarantees**:
 * The system records the order only if the provided order information is valid.
 
@@ -475,9 +505,7 @@ Use case ends.
 
 ---
 
-**System**: BZNUS\
-**Use case**: UC07 - Delete order\
-**Actor**: User\
+**Use case: UC07 - Delete order**\
 **Guarantees**:
 * If the deletion cannot be completed (e.g. invalid order index, order not found), the system does not remove any order.
 
@@ -509,6 +537,10 @@ Use case ends.
 
   Use case ends.
 
+</div>
+
+<div class="section-spacing">
+
 ### Non-Functional Requirements
 
 1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
@@ -519,6 +551,8 @@ Use case ends.
 6. All valid commands should display results within 2 seconds of the user pressing 'Enter'.
 7. The interface should be intuitive enough that a home-based F&B seller with basic computer literacy can navigate the system without needing a comprehensive training manual.
 8. The system should handle invalid user inputs gracefully by displaying clear and helpful error messages without crashing.
+
+</div>
 
 ### Glossary
 
@@ -542,6 +576,8 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
+<div class="section-spacing">
+
 ### Launch and shutdown
 
 1. Initial launch
@@ -558,6 +594,10 @@ testers are expected to do more *exploratory* testing.
        Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
+
+</div>
+
+<div class="section-spacing">
 
 ### Deleting a person
 
@@ -576,6 +616,10 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+</div>
+
+<div class="section-spacing">
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files
@@ -583,3 +627,5 @@ testers are expected to do more *exploratory* testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+</div>
